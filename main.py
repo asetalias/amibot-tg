@@ -4,18 +4,19 @@ import grpc
 from grpc import UnaryUnaryClientInterceptor
 import base64
 
-def authentication() -> UnaryUnaryClientInterceptor:
+def cred_make():
     username = "8728670"
     password = "password"
-    credentials = base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("utf-8")
-    metadata = UnaryUnaryClientInterceptor()
-    return metadata
+    credentials = base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("ascii")
+    return credentials
 
 def main():
-    channel = grpc.insecure_channel("amizone.fly.dev:443")
-    intercept_channel = grpc.intercept_channel(channel, authentication())
-    stub = pb_grpc.AmizoneServiceStub(intercept_channel)
-    response = stub.GetAttendance(pb.EmptyMessage())
+    credentials = grpc.ssl_channel_credentials()
+    channel = grpc.secure_channel("amizone.fly.dev:443", credentials=credentials)
+    stub = pb_grpc.AmizoneServiceStub(channel)
+    cred = cred_make()
+    metadata = [("authorization", f"Basic {cred}")]
+    response = stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
     print(response)
 
 if __name__ == "__main__":
