@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "py-ami-bot"
+version = "0.1.0"
+description = ""
+authors = ["Achintya <achintya22052000@gmail.com>"]
+readme = "README.md"
+packages = [{include = "py_ami_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pymongo = "^4.3.3"
+grpcio = "^1.54.0"
+protobuf = "3.20.0"
+google-api-python-client = "^2.86.0"
+grpc-gateway-protoc-gen-openapiv2 = "^0.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
