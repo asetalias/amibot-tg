@@ -1,5 +1,4 @@
-import grpc
-from auth import get_profile
+from controllers.auth import get_profile
 import gen.amizone_pb2 as pb
 from util.stub import stubber
 
@@ -10,15 +9,13 @@ def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
     if profile is None:
         return None
     
-    stub = stubber(profile["username"], profile["password"])
+    stub, metadata = stubber(profile["username"], profile["password"])
     
     try:
-        response = stub.GetAttendance(pb.GetAttendanceRequest())
+        response = stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
         return response
-    except grpc.RpcError as e:
+    except Exception as e:
         print(e)
         return None
-    finally:
-        stub.close()
     
 
