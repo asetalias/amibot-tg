@@ -9,7 +9,7 @@ def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
     if profile is None:
         return None
     
-    stub, metadata = stubber(profile["username"], profile["password"])
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
     
     try:
         response = stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
@@ -17,5 +17,7 @@ def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
     except Exception as e:
         print(e)
         return None
+    finally:
+        channel.close()
     
 

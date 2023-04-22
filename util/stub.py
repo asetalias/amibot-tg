@@ -12,6 +12,6 @@ def stubber(username, password):
     credentials = grpc.ssl_channel_credentials()
     channel = grpc.secure_channel("amizone.fly.dev:443", credentials=credentials)
     stub = pb_grpc.AmizoneServiceStub(channel)
-    return stub, metadata
+    return stub, metadata, channel
 
 
