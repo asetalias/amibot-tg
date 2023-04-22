@@ -3,16 +3,16 @@ import gen.amizone_pb2 as pb
 from util.stub import stubber
 
 
-def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
+async def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
 
-    profile = get_profile(telegram_id)
+    profile = await get_profile(telegram_id)
     if profile is None:
         return None
     
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     
     try:
-        response = stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
+        response = await stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
         return response
     except Exception as e:
         print(e)
@@ -21,16 +21,16 @@ def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
         channel.close()
     
 
-def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
-    
-    profile = get_profile(telegram_id)
+async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
+
+    profile = await get_profile(telegram_id)
     if profile is None:
         return None
     
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     
     try:
-        response = stub.GetExamSchedule(pb.EmptyMessage(), metadata=metadata)
+        response = await stub.GetExamSchedule(pb.EmptyMessage(), metadata=metadata)
         return response
     except Exception as e:
         print(e)
