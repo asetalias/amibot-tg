@@ -1,10 +1,7 @@
-import gen.amizone_pb2 as pb
-from util.stub import stub, metadata
-
+from controllers import rpc_calls
 
 def main():
-    response = stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
-    print(response.records[0].attendance)
+    rpc_calls.get_attendance(1)
 
 if __name__ == "__main__":
     main()

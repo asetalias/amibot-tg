@@ -1,4 +1,7 @@
 gen:
 	rm -f gen/*.py; cd proto; buf generate; cd ...
 	
-PHONY: gen
+mongo: 
+	docker run -d --name py-mongo mongo    
+
+PHONY: gen, mongo
