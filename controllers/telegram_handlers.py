@@ -41,5 +41,16 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
     except Exception as e:
         await update.message.reply_text("There was an error fetching attendance. Please try again later.")
 
+async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    try:
+        response = await get_exam_schedule(user_id)
+        if response is None:
+            await update.message.reply_text("There was an error, maybe you are not logged in. Use /login to login.")
+            return
+        
+        await update.message.reply_text(response)
+    except Exception as e:
+        await update.message.reply_text("There was an error fetching exam schedule. Please try again later.")
 
 

@@ -21,3 +21,19 @@ def get_attendance(telegram_id) -> pb.AttendanceRecords | None:
         channel.close()
     
 
+def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
+    
+    profile = get_profile(telegram_id)
+    if profile is None:
+        return None
+    
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
+    
+    try:
+        response = stub.GetExamSchedule(pb.EmptyMessage(), metadata=metadata)
+        return response
+    except Exception as e:
+        print(e)
+        return None
+    finally:
+        channel.close()

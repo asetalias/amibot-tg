@@ -11,6 +11,7 @@ def main():
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("login", login_handler))
     app.add_handler(CommandHandler("attendance", get_attendance_handler))
+    app.add_handler(CommandHandler("exam", get_exam_schedule_handler))
 
     print("Polling...")
     app.run_polling(poll_interval=3)
