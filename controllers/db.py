@@ -1,17 +1,17 @@
 from util.db_client import profile
 
 
-def create_profile(telegram_id, username, password) -> str:
+async def create_profile(telegram_id: int, username, password) -> str:
     data = {"_id": telegram_id, "username": username, "password": password}
 
     try:
-        profile.insert_one(data)
+        await profile.insert_one(data)
         return "Profile created successfully"
     except Exception as e:
         return str(e)
 
 
-def get_profile(telegram_id) -> dict:
+def get_profile(telegram_id: int) -> dict:
     try:
         data = profile.find_one({"_id": telegram_id})
         return data
@@ -19,19 +19,19 @@ def get_profile(telegram_id) -> dict:
         return str(e)
 
 
-def update_profile(telegram_id, username, password) -> str:
+async def update_profile(telegram_id: int, username, password) -> str:
     try:
         filter = {"_id": telegram_id}
         update = {"$set": {"username": username, "password": password}}
-        profile.update_one(filter, update)
+        await profile.update_one(filter, update)
         return "Profile updated successfully"
     except Exception as e:
         return str(e)
 
 
-def delete_profile(telegram_id) -> str:
+async def delete_profile(telegram_id: int) -> str:
     try:
-        profile.delete_one({"_id": telegram_id})
+        await profile.delete_one({"_id": telegram_id})
         return "Profile deleted successfully"
     except Exception as e:
         return str(e)
