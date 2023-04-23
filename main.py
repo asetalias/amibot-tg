@@ -1,4 +1,4 @@
-from telegram.ext import Application, CommandHandler
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, filters
 from util.env import TOKEN
 from controllers.telegram_handlers import *
 
@@ -13,6 +13,10 @@ def main():
     app.add_handler(CommandHandler("login", login_handler))
     app.add_handler(CommandHandler("attendance", get_attendance_handler))
     app.add_handler(CommandHandler("exam", get_exam_schedule_handler))
+
+    # Query Handler
+    app.add_handler(CallbackQueryHandler(button_query_handler))
+    
 
     print("Polling...")
     app.run_polling(poll_interval=3)
