@@ -7,5 +7,3 @@ db = client[MONGO_DATABASE]
 
 # Collection, use profile to create and query the db
 profile = db["profile"]
-
-

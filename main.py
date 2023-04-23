@@ -2,6 +2,7 @@ from telegram.ext import Application, CommandHandler
 from util.env import TOKEN
 from controllers.telegram_handlers import *
 
+
 def main():
     print("Starting AmiBot...")
 
@@ -15,6 +16,7 @@ def main():
 
     print("Polling...")
     app.run_polling(poll_interval=3)
+
 
 if __name__ == "__main__":
     main()
