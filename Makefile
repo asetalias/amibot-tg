@@ -7,4 +7,4 @@ mongo:
 dev:
 	poetry run nodemon --exec python main.py
 
-PHONY: gen, mongo, dev
+PHONY: gen mongo dev
