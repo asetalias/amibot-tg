@@ -1,3 +1,4 @@
+from formatter.response_formatters import get_attendance_formatter
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from controllers.db import create_profile
@@ -57,8 +58,10 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
         if response is None:
             await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.")
             return
+        
+        msg = get_attendance_formatter(response)
 
-        await context.bot.send_message(chat_id=user_id, text=str(response))
+        await context.bot.send_message(chat_id=user_id, text=msg)
     except Exception as e:
         print(e)
         await context.bot.send_message(chat_id=user_id, text="There was an error fetching attendance. Please try again later.")
