@@ -11,13 +11,13 @@ async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     try:
         print("Getting attendance via grpc")
-        response = stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
+        response = await stub.GetAttendance(pb.EmptyMessage(), metadata=metadata)
         return response
     except Exception as e:
         print(e)
         return None
     finally:
-        channel.close()
+        await channel.close()
 
 
 async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
