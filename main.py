@@ -16,7 +16,6 @@ def main():
 
     # Query Handler
     app.add_handler(CallbackQueryHandler(button_query_handler))
-    
 
     print("Polling...")
     app.run_polling(poll_interval=3)
