@@ -53,6 +53,8 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     try:
+        await context.bot.send_message(chat_id=user_id, text="Fetching attendance...")
+
         response = await get_attendance(user_id)
         # ! Need better exception handling
         if response is None:
@@ -61,7 +63,7 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
         
         msg = get_attendance_formatter(response)
 
-        await context.bot.send_message(chat_id=user_id, text=msg)
+        await context.bot.send_message(chat_id=user_id, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), text=msg)
     except Exception as e:
         print(e)
         await context.bot.send_message(chat_id=user_id, text="There was an error fetching attendance. Please try again later.")
