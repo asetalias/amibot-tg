@@ -54,7 +54,6 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
     user_id = update.effective_user.id
     try:
         await context.bot.send_message(chat_id=user_id, text="Fetching attendance...")
-
         response = await get_attendance(user_id)
         # ! Need better exception handling
         if response is None:

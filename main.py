@@ -19,7 +19,7 @@ def main():
     
 
     print("Polling...")
-    app.run_polling(poll_interval=3)
+    app.run_polling()
 
 
 if __name__ == "__main__":

@@ -11,11 +11,12 @@ async def create_profile(telegram_id: int, username, password) -> str:
         return str(e)
 
 
-def get_profile(telegram_id: int) -> dict:
+async def get_profile(telegram_id: int) -> dict:
     try:
-        data = profile.find_one({"_id": telegram_id})
+        data = await profile.find_one({"_id": telegram_id})
         return data
     except Exception as e:
+        print(e)
         return str(e)
 
 

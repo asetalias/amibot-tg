@@ -4,7 +4,7 @@ from util.stub import stubber
 
 
 async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
-    profile = get_profile(telegram_id)
+    profile = await get_profile(telegram_id)
     if profile is None:
         return None
 
@@ -21,7 +21,7 @@ async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
 
 
 async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
-    profile = get_profile(telegram_id)
+    profile = await get_profile(telegram_id)
     if profile is None:
         return None
 
@@ -34,4 +34,4 @@ async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
         print(e)
         return None
     finally:
-        channel.close()
+        await channel.close()
