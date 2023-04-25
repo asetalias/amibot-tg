@@ -13,6 +13,8 @@ def main():
     app.add_handler(CommandHandler("login", login_handler))
     app.add_handler(CommandHandler("attendance", get_attendance_handler))
     app.add_handler(CommandHandler("exam", get_exam_schedule_handler))
+    app.add_handler(CommandHandler("course", get_current_course_handler))
+    app.add_handler(CommandHandler("today", get_class_schedule_handler))
 
     # Query Handler
     app.add_handler(CallbackQueryHandler(button_query_handler))
