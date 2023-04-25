@@ -21,7 +21,7 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await get_attendance_handler(update, context)
 
     if "exam" in update.callback_query.data:
-        await update.callback_query.message.reply_text("Exam Schedule")
+        await get_exam_schedule_handler(update, context)
 
 
 # Command Handlers
@@ -58,7 +58,7 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
         response = await get_attendance(user_id)
         # ! Need better exception handling
         if response is None:
-            await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.")
+            await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
             return
         
         msg = get_attendance_formatter(response)
@@ -66,18 +66,20 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
         await context.bot.send_message(chat_id=user_id, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), text=msg)
     except Exception as e:
         print(e)
-        await context.bot.send_message(chat_id=user_id, text="There was an error fetching attendance. Please try again later.")
+        await context.bot.send_message(chat_id=user_id, text="There was an error fetching attendance. Please try again later.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
 
 
 async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     try:
+        await context.bot.send_message(chat_id=user_id, text="Fetching exam schedule...")
+
         response = await get_exam_schedule(user_id)
         if response is None:
             # ! Need better exception handling
-            await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.")
+            await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
             return
 
-        await context.bot.send_message(chat_id=user_id, text=str(response))
+        await context.bot.send_message(chat_id=user_id, text=str(response), reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
     except Exception as e:
-        await context.bot.send_message(chat_id=user_id, text="There was an error fetching exam schedule. Please try again later.")
+        await context.bot.send_message(chat_id=user_id, text="There was an error fetching exam schedule. Please try again later.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))

@@ -21,7 +21,7 @@ async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
 
 
 async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
-    profile = await get_profile(telegram_id)
+    profile = get_profile(telegram_id)
     if profile is None:
         return None
 
