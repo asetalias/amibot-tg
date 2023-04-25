@@ -96,7 +96,7 @@ Before running the bot, you'll need to update the token in the `env.py` file wit
 
     To something like this!
 
-    ``` pyhton
+    ``` python
     TOKEN = os.environ.get("TOKEN", "5123422892:ABEyasfEXf...")
     ```
 
