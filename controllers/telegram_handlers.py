@@ -1,4 +1,4 @@
-from formatter.response_formatters import get_attendance_formatter
+from formatter.response_formatters import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from controllers.db import create_profile
@@ -79,6 +79,9 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
             await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
             return
 
-        await context.bot.send_message(chat_id=user_id, text=str(response), reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
+        msg = get_exam_formatter(response)
+
+        await context.bot.send_message(chat_id=user_id, text=msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
     except Exception as e:
+        print(e)
         await context.bot.send_message(chat_id=user_id, text="There was an error fetching exam schedule. Please try again later.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))

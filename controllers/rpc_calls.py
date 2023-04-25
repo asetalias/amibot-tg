@@ -26,8 +26,8 @@ async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
         return None
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
-
     try:
+        print("Getting exam schedule via grpc")
         response = await stub.GetExamSchedule(pb.EmptyMessage(), metadata=metadata)
         return response
     except Exception as e:

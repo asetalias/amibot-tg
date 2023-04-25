@@ -1,4 +1,5 @@
 import gen.amizone_pb2 as pb
+from datetime import datetime
 
 def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
     msg = "Attendance Records: \n\n"
@@ -8,3 +9,14 @@ def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
         msg += f"{record.course.name} \n"
         msg += f" => {record.attendance.attended}/{record.attendance.held} ({percent})%  \n\n"
     return msg
+
+def get_exam_formatter(response: pb.ExaminationSchedule()) -> str:
+    print("Formatting")
+    msg = response.title + "\n\n"
+    for exam in response.exams:
+        date = datetime.fromtimestamp(exam.time.seconds)
+        msg += f"{exam.course.code} \n"
+        msg += f"{exam.course.name} \n"
+        msg += f"{date.strftime('%d %b %Y')} \n\n"
+    return msg
+        
