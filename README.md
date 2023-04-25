@@ -13,7 +13,7 @@ Py-Amibot is a chat bot that provides a faster and more reliable alternative to 
   - [Getting started](#getting-started)
     - [Installing dependencies](#installing-dependencies)
     - [Updating the Token](#updating-the-token)
-    - [Generating Protobuf Code](#generating-protobuf-code)
+    - [Generating Protobuf](#generating-protobuf)
     - [Setting Up MongoDB](#setting-up-mongodb)
     - [Running the Bot with Nodemon](#running-the-bot-with-nodemon)
   - [Usage](#usage)
@@ -100,7 +100,7 @@ Before running the bot, you'll need to update the token in the `env.py` file wit
     TOKEN = os.environ.get("TOKEN", "5123422892:ABEyasfEXf...")
     ```
 
-### Generating Protobuf Code
+### Generating Protobuf
 
 If you make any changes to the `amizone.proto` file, you'll need to regenerate the corresponding Python code. You can do this by running the following command:
 
@@ -129,8 +129,10 @@ make dev
 Once the bot is up and running, you can use the following commands to interact with it:
 
 - `/start`: Start the bot and display the available commands.
+- `/login "amzione_id" "amizone_password"`: Logs you in Amizone.
 - `/attendance`: Get your attendance information.
 - `/schedule`: Get your class schedule.
+- `/about`: Get details about our project.
 
 ## License
 
