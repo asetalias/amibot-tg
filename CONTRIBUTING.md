@@ -1,5 +1,7 @@
 # Contributing to go-amizone
 
+### Note: The `dev` branch is the most up-to date version of this repository and where major features are currently being worked on
+
 We welcome contributions to Amibot-tg from the community. If you would like to contribute, please follow these steps:
 
 1. Fork this repository
