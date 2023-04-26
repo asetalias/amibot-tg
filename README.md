@@ -1,5 +1,13 @@
 # Amibot-tg
 
+[![Telegram](https://img.shields.io/static/v1?logo=Telegram&logoColor=fff&labelColor=1e96d1&label=Amibot&message=⬅️%20Click%20to%20use%20&color=50524f)](https://t.me/Achintya_test_bot)
+
+[![Issues](https://img.shields.io/github/issues/achintya-7/amibot-tg?logo=github)](https://github.com/achintya-7/amibot-tg/issues)
+[![License](https://img.shields.io/github/license/achintya-7/amibot-tg)](./LICENSE)
+[![Python](https://img.shields.io/static/v1?logo=Python&logoColor=ffdd54&labelColor=3670a0&label=Python&message=^3.11&color=50524f)](./poetry.lock)
+[![MongoDB Logo](https://img.shields.io/badge/-MongoDB-47A248?logo=MongoDB&logoColor=fff)](mongodb)
+[![go-amizone Logo](https://img.shields.io/badge/go%20amizone-2D8CFF?logo=go&logoColor=white)](https://github.com/ditsuke/go-amizone)
+
 Amibot-tg is a chat bot that provides a faster and more reliable alternative to the Amity University student portal. With Amibot-tg, you can access all your essential information, including your grades, attendance, class schedule, and more, directly from Telegram. Say goodbye to the inconvenience of logging in to the Amizone website and enjoy the convenience of Amibot-tg on Telegram.
 
 ## Table of contents
