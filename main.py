@@ -27,7 +27,6 @@ def main():
 
     # Query Handler
     app.add_handler(CallbackQueryHandler(button_query_handler))
-    
 
     logger.info("Starting bot polling...")
     app.run_polling()

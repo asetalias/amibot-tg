@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger()
 
+
 async def get_class_schedule(telegram_id: int) -> pb.ScheduledClasses | None:
     profile = await get_profile(telegram_id)
     if profile is None:
@@ -19,13 +20,16 @@ async def get_class_schedule(telegram_id: int) -> pb.ScheduledClasses | None:
 
     try:
         logger.info("Getting class schedule via grpc")
-        response = await stub.GetClassSchedule(pb.ClassScheduleRequest(date=val), metadata=metadata)
+        response = await stub.GetClassSchedule(
+            pb.ClassScheduleRequest(date=val), metadata=metadata
+        )
         return response
     except Exception as e:
         print(e.with_traceback(e.__traceback__))
         return None
     finally:
         await channel.close()
+
 
 async def get_current_course(telegram_id: int) -> pb.Courses | None:
     profile = await get_profile(telegram_id)
@@ -41,6 +45,7 @@ async def get_current_course(telegram_id: int) -> pb.Courses | None:
         return None
     finally:
         await channel.close()
+
 
 async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
     profile = await get_profile(telegram_id)

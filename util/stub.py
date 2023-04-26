@@ -5,7 +5,9 @@ from util.env import URL
 
 
 def cred_maker(username, password):
-    credentials = base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("ascii")
+    credentials = base64.b64encode(f"{username}:{password}".encode("utf-8")).decode(
+        "ascii"
+    )
     metadata = [("authorization", f"Basic {credentials}")]
     return metadata
 
