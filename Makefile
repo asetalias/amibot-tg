@@ -7,4 +7,10 @@ mongo:
 dev:
 	poetry run nodemon --exec python main.py
 
-PHONY: gen, mongo, dev
+env:
+	poetry shell
+
+docker:
+	docker build -t py-amibot .
+
+PHONY: gen, mongo, dev, env

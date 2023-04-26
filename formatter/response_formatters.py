@@ -1,7 +1,11 @@
 import gen.amizone_pb2 as pb
 from datetime import datetime
+import logging
+
+logger = logging.getLogger()
 
 def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
+    logger.info("Formatting")
     msg = "Attendance Records: \n\n"
     for record in response.records:
         percent = round(record.attendance.attended / record.attendance.held * 100, 2)
@@ -11,7 +15,7 @@ def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
     return msg
 
 def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
-    print("Formatting")
+    logger.info("Formatting")
     msg = response.title + "\n\n"
     for exam in response.exams:
         date = datetime.fromtimestamp(exam.time.seconds)
@@ -21,6 +25,7 @@ def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
     return msg
         
 def get_courses_formatter(response: pb.Courses) -> str:
+    logger.info("Formatting")
     msg = "Current Courses: \n\n"
     for course in response.courses:
         link = f"<a href='{course.syllabus_doc}'>Syllabus</a>"
@@ -31,6 +36,7 @@ def get_courses_formatter(response: pb.Courses) -> str:
     return msg
 
 def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
+    logger.info("Formatting")
     msg = "Class Schedule: \n\n"
     for index in response.classes:
         start = datetime.fromtimestamp(index.start_time.seconds)

@@ -3,6 +3,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from controllers.db import create_profile
 from controllers.rpc_calls import *
+import logging
+
+logger = logging.getLogger()
 
 BUTTON_MARKUP = [
         [InlineKeyboardButton("About", callback_data="about")],
@@ -38,8 +41,21 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
 # Command Handlers
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    msg: str = "Welcome to AmiBot, the Amizone Telegram Bot! \n\nEnter your username and password separated by a space \nExample: /login 837283 password"
+    msg: str = """\
+        Welcome to AmiBot, the Amizone Telegram Bot!
+        
+        Enter your username and password separated by a space 
+        Example: /login 837283 password
+
+        If you have already logged in before, you can use /continue.
+
+        To update your login credentials, use /login again.
+        
+    """
     await update.message.reply_text(msg)
+
+async def continue_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Welcome back!", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
 
 async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -48,6 +64,7 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
         response = await get_class_schedule(user_id)
         if response is None:
             # ! Need better exception handling
+            logger.debug(msg="Error fetching class schedule")
             await context.bot.send_message(chat_id=user_id, text="There was an error, maybe you are not logged in. Use /login to login.", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP))
             return
 
