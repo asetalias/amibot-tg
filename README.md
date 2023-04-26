@@ -17,13 +17,15 @@ Amibot-tg is a chat bot that provides a faster and more reliable alternative to 
 
 Here are some of the features of Amibot-tg:
 
-- Interactive and easy-to-use interface: Amibot-tg provides a simple and intuitive interface on Telegram, allowing you to access your information with just a few taps.
-- Access to attendance and class schedule: Amibot-tg already provides information on your attendance and classes.
-- Works even when network connectivity is limited: Amibot-tg works even when you have limited connectivity, allowing you to access your information anywhere, even on Campus smile! Since Amibot-tg uses Telegram, you can see previously queried information even when you are offline.
-- Platform independent: Got an iPhone? No problem. Use Amibot-tg on anything that runs Telegram.
+- Access Attendance.
+- Access Class schedule.
+- Access Exam Schedule.
+- Access Current Courses.
 
 ## What Makes Amibot-tg Different?
 
+- Interactive and easy-to-use interface: Amibot-tg provides a simple and intuitive interface on Telegram, allowing you to access your information with just a few taps.
+- Since Amibot-tg uses Telegram, you can see previously queried information even when you are offline.
 - No need to install an additional app: Unlike other solutions, Amibot-tg does not require you to install a separate app on your device. You can simply use the Telegram app that you already have installed.
 - Lightweight and efficient: Amibot-tg uses a textual format for data, requiring less bandwidth and making it more efficient than other solutions. It will even work on slow internet connections!
 - Open-source: Review the code, contribute to the project, or even host your own instance.
@@ -32,7 +34,6 @@ Here are some of the features of Amibot-tg:
 
 - **Faculty feedback:** Amibot-tg targets a big pain point in the average Amity student's life: Faculty feedback. It can automate the process for you, filling feedback for all your faculties at once.
 - **Allow students to schedule daily delivery of class schedules and attendance information:** In the future, Amibot-tg _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
-- **Access Exam Schedule:** Allow students to access exam schedules if available.
 - **Automated Class Schedule:** Daily delivery of class schedule.
 - **Add to calender:** Add class schedule to calender.
 
