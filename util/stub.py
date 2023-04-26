@@ -13,6 +13,6 @@ def cred_maker(username, password):
 def stubber(username, password):
     metadata = cred_maker(username, password)
     credentials = grpc.ssl_channel_credentials()
-    channel = grpc.secure_channel(URL, credentials=credentials)
+    channel = grpc.aio.secure_channel(URL, credentials=credentials)
     stub = pb_grpc.AmizoneServiceStub(channel)
     return stub, metadata, channel

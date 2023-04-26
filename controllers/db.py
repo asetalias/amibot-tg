@@ -2,6 +2,11 @@ from util.db_client import profile
 
 
 async def create_profile(telegram_id: int, username, password) -> str:
+    data = await profile.find_one({"_id": telegram_id})
+    if data != None:
+        resp = await update_profile(telegram_id, username, password)
+        return resp
+
     data = {"_id": telegram_id, "username": username, "password": password}
 
     try:
@@ -11,11 +16,12 @@ async def create_profile(telegram_id: int, username, password) -> str:
         return str(e)
 
 
-def get_profile(telegram_id: int) -> dict:
+async def get_profile(telegram_id: int) -> dict:
     try:
-        data = profile.find_one({"_id": telegram_id})
+        data = await profile.find_one({"_id": telegram_id})
         return data
     except Exception as e:
+        print(e)
         return str(e)
 
 
