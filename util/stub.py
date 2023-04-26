@@ -1,6 +1,7 @@
 import base64
 import grpc
 import gen.amizone_pb2_grpc as pb_grpc
+from util.env import URL
 
 
 def cred_maker(username, password):
@@ -14,6 +15,6 @@ def cred_maker(username, password):
 def stubber(username, password):
     metadata = cred_maker(username, password)
     credentials = grpc.ssl_channel_credentials()
-    channel = grpc.secure_channel("amizone.fly.dev:443", credentials=credentials)
+    channel = grpc.aio.secure_channel(URL, credentials=credentials)
     stub = pb_grpc.AmizoneServiceStub(channel)
     return stub, metadata, channel

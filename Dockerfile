@@ -1,7 +1,8 @@
-FROM python:3.8-slim-buster
+FROM python:3.11-slim-buster
 
-ENV MONGO_URI "Value 1"
-ENV MONGO_DATABASE "Value 2"
+ENV MONGO_URI "mongo url"
+ENV MONGO_DATABASE "users"
+ENV TOKEN "TOKEN"
 
 WORKDIR /app
 
@@ -11,8 +12,8 @@ COPY pyproject.toml poetry.lock /app/
 RUN pip install poetry
 
 # Install the dependencies
-RUN poetry config virtualenvs.create false && poetry install --no-dev
+RUN poetry config virtualenvs.create false && poetry install --only main --no-root
 
 COPY . /app
 
-CMD ["python", "main.py"]
+CMD ["poetry", "run", "python", "main.py"]
