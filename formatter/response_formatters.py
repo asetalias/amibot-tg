@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger()
 
+
 def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
     logger.info("Formatting")
     msg = "Attendance Records: \n\n"
@@ -14,6 +15,7 @@ def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
         msg += f" => {record.attendance.attended}/{record.attendance.held} ({percent})%  \n\n"
     return msg
 
+
 def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
     logger.info("Formatting")
     msg = response.title + "\n\n"
@@ -23,7 +25,8 @@ def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
         msg += f"{exam.course.name} \n"
         msg += f"{date.strftime('%d %b %Y')} \n\n"
     return msg
-        
+
+
 def get_courses_formatter(response: pb.Courses) -> str:
     logger.info("Formatting")
     msg = "Current Courses: \n\n"
@@ -35,6 +38,7 @@ def get_courses_formatter(response: pb.Courses) -> str:
         msg += f"{link} \n\n"
     return msg
 
+
 def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
     logger.info("Formatting")
     msg = "Class Schedule: \n\n"
@@ -45,9 +49,13 @@ def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
         msg += f"{index.course.name} \n"
         msg += f"{start.strftime('%H:%M')} to {end.strftime('%H:%M')} \n"
         msg += f"{index.faculty} \n"
-        msg += f"{index.room} \n" + f"Attendance : {attendance_responder(index.attendance)}"
+        msg += (
+            f"{index.room} \n"
+            + f"Attendance : {attendance_responder(index.attendance)}"
+        )
         msg += "\n\n"
     return msg
+
 
 def attendance_responder(val: pb.AttendanceState) -> str:
     if val == pb.PRESENT:
@@ -58,6 +66,6 @@ def attendance_responder(val: pb.AttendanceState) -> str:
 
     if val == pb.PENDING:
         return "⚪️"
-    
+
     else:
         return "🟡"
