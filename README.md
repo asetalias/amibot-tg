@@ -1,13 +1,13 @@
-# Py-Amibot
+# Amibot-tg
 
-Py-Amibot is a chat bot that provides a faster and more reliable alternative to the Amity University student portal. With Py-Amibot, you can access all your essential information, including your grades, attendance, class schedule, and more, directly from Telegram. Say goodbye to the inconvenience of logging in to the Amizone website and enjoy the convenience of Py-Amibot on Telegram.
+Amibot-tg is a chat bot that provides a faster and more reliable alternative to the Amity University student portal. With Amibot-tg, you can access all your essential information, including your grades, attendance, class schedule, and more, directly from Telegram. Say goodbye to the inconvenience of logging in to the Amizone website and enjoy the convenience of Amibot-tg on Telegram.
 
 ## Table of contents
 
-- [Py-Amibot](#py-amibot)
+- [Amibot-tg](#amibot-tg)
   - [Table of contents](#table-of-contents)
   - [Features](#features)
-  - [What Makes Py-Amibot Different?](#what-makes-py-amibot-different)
+  - [What Makes Amibot-tg Different?](#what-makes-amibot-tg-different)
   - [Future Plans](#future-plans)
   - [Requirements](#requirements)
   - [Getting started](#getting-started)
@@ -21,30 +21,30 @@ Py-Amibot is a chat bot that provides a faster and more reliable alternative to 
 
 ## Features
 
-Here are some of the features of Py-Amibot:
+Here are some of the features of Amibot-tg:
 
-- Interactive and easy-to-use interface: Py-Amibot provides a simple and intuitive interface on Telegram, allowing you to access your information with just a few taps.
-- Access to attendance and class schedule: Py-Amibot already provides information on your attendance and classes.
-- Works even when network connectivity is limited: Py-Amibot works even when you have limited connectivity, allowing you to access your information anywhere, even on Campus smile! Since Py-Amibot uses Telegram, you can see previously queried information even when you are offline.
-- Platform independent: Got an iPhone? No problem. Use Py-Amibot on anything that runs Telegram.
+- Interactive and easy-to-use interface: Amibot-tg provides a simple and intuitive interface on Telegram, allowing you to access your information with just a few taps.
+- Access to attendance and class schedule: Amibot-tg already provides information on your attendance and classes.
+- Works even when network connectivity is limited: Amibot-tg works even when you have limited connectivity, allowing you to access your information anywhere, even on Campus smile! Since Amibot-tg uses Telegram, you can see previously queried information even when you are offline.
+- Platform independent: Got an iPhone? No problem. Use Amibot-tg on anything that runs Telegram.
 
-## What Makes Py-Amibot Different?
+## What Makes Amibot-tg Different?
 
-- No need to install an additional app: Unlike other solutions, Py-Amibot does not require you to install a separate app on your device. You can simply use the Telegram app that you already have installed.
-- Lightweight and efficient: Py-Amibot uses a textual format for data, requiring less bandwidth and making it more efficient than other solutions. It will even work on slow internet connections!
+- No need to install an additional app: Unlike other solutions, Amibot-tg does not require you to install a separate app on your device. You can simply use the Telegram app that you already have installed.
+- Lightweight and efficient: Amibot-tg uses a textual format for data, requiring less bandwidth and making it more efficient than other solutions. It will even work on slow internet connections!
 - Open-source: Review the code, contribute to the project, or even host your own instance.
 
 ## Future Plans
 
-- **Faculty feedback:** Py-Amibot targets a big pain point in the average Amity student's life: Faculty feedback. It can automate the process for you, filling feedback for all your faculties at once.
-- **Allow students to schedule daily delivery of class schedules and attendance information:** In the future, Py-Amibot _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
+- **Faculty feedback:** Amibot-tg targets a big pain point in the average Amity student's life: Faculty feedback. It can automate the process for you, filling feedback for all your faculties at once.
+- **Allow students to schedule daily delivery of class schedules and attendance information:** In the future, Amibot-tg _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
 - **Access Exam Schedule:** Allow students to access exam schedules if available.
 - **Automated Class Schedule:** Daily delivery of class schedule.
 - **Add to calender:** Add class schedule to calender.
 
 ## Requirements
 
-To use Py-Amibot, you'll need:
+To use Amibot-tg, you'll need:
 
 - Python 3.11 or higher
 - The following Python packages:
@@ -65,8 +65,8 @@ To use Py-Amibot, you'll need:
 Clone the repository:
 
 ```shell
-git clone https://github.com/achintya-7/Py-Amibot.git
-cd Py-Amibot
+git clone https://github.com/achintya-7/Amibot-tg.git
+cd Amibot-tg
 ```
 
 ### Installing dependencies
