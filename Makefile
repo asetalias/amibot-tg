@@ -13,4 +13,4 @@ env:
 docker:
 	docker build -t py-amibot .
 
-PHONY: gen, mongo, dev, env
+.PHONY: gen, mongo, dev, env, docker
