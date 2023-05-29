@@ -1,4 +1,10 @@
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, filters
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    CallbackQueryHandler,
+    ConversationHandler,
+    filters,
+)
 from util.env import TOKEN
 from controllers.telegram_handlers import *
 import logging
@@ -24,6 +30,14 @@ def main():
     app.add_handler(CommandHandler("course", get_current_course_handler))
     app.add_handler(CommandHandler("today", get_class_schedule_handler))
     app.add_handler(CommandHandler("continue", continue_handler))
+
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler("feedback", fill_faculty_feedback_handler)],
+        states={ONE: [MessageHandler(filters.ALL, one)]},
+        fallbacks=[],
+    )
+    app.add_handler(conv_handler)
+    app.add_handler(CallbackQueryHandler(button_query_handler))
 
     # Query Handler
     app.add_handler(CallbackQueryHandler(button_query_handler))

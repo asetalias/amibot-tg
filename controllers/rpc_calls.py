@@ -79,3 +79,27 @@ async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
         return None
     finally:
         await channel.close()
+
+
+async def fill_faculty_feedback(
+    telegram_id, rating, query_rating, comment
+) -> pb.FillFacultyFeedbackRequest | None:
+    profile = await get_profile(telegram_id)
+    if profile is None:
+        return None
+
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
+    try:
+        logger.info("Filling faculty feedback via grpc")
+        response = await stub.FillFacultyFeedback(
+            pb.FillFacultyFeedbackRequest(
+                rating=rating, query_rating=query_rating, comment=comment
+            ),
+            metadata=metadata,
+        )
+        return response
+    except Exception as e:
+        print(e)
+        return None
+    finally:
+        await channel.close()
