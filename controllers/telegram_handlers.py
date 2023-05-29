@@ -244,7 +244,7 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
         )
 
 
-ONE = range(1)
+GET_FACULTY_FEEDBACK = range(1)
 
 
 async def fill_faculty_feedback_handler(
@@ -252,15 +252,17 @@ async def fill_faculty_feedback_handler(
 ) -> int:
     user_id = update.effective_user.id
     await context.bot.send_message(chat_id=user_id, text=FEEDBACK_INSTRUCTIONS)
-    logger.info("Sent instructions")
-    return ONE
+    logger.info("Sent faculty feedback instructions")
+    return GET_FACULTY_FEEDBACK
 
 
-async def one(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def get_faculty_feedback(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> int:
     user_id = update.effective_user.id
     user_response = update.message.text
     user_response_args = user_response.split(" ")
-    logger.info("got input")
+    logger.info("Received input for faculty feedback")
 
     if len(user_response_args) != 3:
         await context.bot.send_message(
@@ -268,7 +270,7 @@ async def one(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment}",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
-        return ONE
+        return GET_FACULTY_FEEDBACK
 
     try:
         rating = int(user_response_args[0])

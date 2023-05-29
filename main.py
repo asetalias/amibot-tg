@@ -33,7 +33,9 @@ def main():
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("feedback", fill_faculty_feedback_handler)],
-        states={ONE: [MessageHandler(filters.ALL, one)]},
+        states={
+            GET_FACULTY_FEEDBACK: [MessageHandler(filters.ALL, get_faculty_feedback)]
+        },
         fallbacks=[],
     )
     app.add_handler(conv_handler)
