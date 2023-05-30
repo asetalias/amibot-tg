@@ -23,9 +23,10 @@ BUTTON_MARKUP = [
         InlineKeyboardButton("Class Schedule", callback_data="class_schedule"),
     ],
     [
-        InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback"),
-        InlineKeyboardButton("Register for Wifi", callback_data="register_wifi"),
+        InlineKeyboardButton("Get WiFi info", callback_data="get_wifi_info"),
+        InlineKeyboardButton("Register for WiFi", callback_data="register_wifi"),
     ],
+    [InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback")],
 ]
 
 ABOUT_MESSAGE = "AmiBot is a Telegram bot that provides an easy way to access Amizone. \nIt is brought to you by ALIAS."
@@ -93,6 +94,9 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await update.callback_query.message.reply_text(
             FEEDBACK_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
+
+    if "get_wifi_info" in update.callback_query.data:
+        await get_wifi_info_handler(update, context)
 
     if "register_wifi" in update.callback_query.data:
         await update.callback_query.message.reply_text(
@@ -348,6 +352,37 @@ async def get_faculty_feedback(
     return ConversationHandler.END
 
 
+async def get_wifi_info_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    try:
+        await context.bot.send_message(
+            chat_id=user_id, text="Fetching WiFi information..."
+        )
+
+        response = await get_wifi_info(user_id)
+        if response is None:
+            # ! Need better exception handling
+            await context.bot.send_message(
+                chat_id=user_id,
+                text="There was an error, maybe you are not logged in. Use /login to login.",
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            )
+            return
+
+        msg = get_wifi_info_formatter(response)
+
+        await context.bot.send_message(
+            chat_id=user_id, text=msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+        )
+    except Exception as e:
+        print(e)
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="There was an error fetching WiFi information. Please try again later.",
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
+
+
 REGISTER_WIFI = range(1)
 
 
@@ -358,7 +393,7 @@ async def register_wifi_entry(
     await context.bot.send_message(
         chat_id=user_id, text=WIFI_INSTRUCTIONS, parse_mode=ParseMode.HTML
     )
-    logger.info("Sent wifi registration instructions")
+    logger.info("Sent WiFi registration instructions")
     return REGISTER_WIFI
 
 
@@ -368,7 +403,7 @@ async def register_wifi_handler(
     user_id = update.effective_user.id
     user_response = update.message.text
     user_response_args = user_response.split(" ")
-    logger.info("Received input for wifi registration")
+    logger.info("Received input for WiFi registration")
 
     if len(user_response_args) != 2:
         await context.bot.send_message(
