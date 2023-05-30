@@ -299,6 +299,14 @@ async def get_faculty_feedback(
     user_response_args = user_response.split(" ")
     logger.info("Received input for faculty feedback")
 
+    if user_response_args == ["cancel"]:
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="Operation cancelled",
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
+        return ConversationHandler.END
+
     if len(user_response_args) != 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
@@ -404,6 +412,14 @@ async def register_wifi_handler(
     user_response = update.message.text
     user_response_args = user_response.split(" ")
     logger.info("Received input for WiFi registration")
+
+    if user_response_args == ["cancel"]:
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="Operation cancelled",
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
+        return ConversationHandler.END
 
     if len(user_response_args) != 2:
         await context.bot.send_message(
