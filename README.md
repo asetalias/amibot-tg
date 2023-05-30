@@ -54,7 +54,9 @@ Visit [Amibot-tg](https://t.me/Achintya_test_bot) on telegram from there you can
 - `/attendance`: Get your attendance information.
 - `/schedule`: Get your class schedule.
 - `/about`: Get details about our project.
-- `/feedback`: Fill all your faculty feedback in one go.
+- `/facultyFeedback`: Fill all your faculty feedback in one go.
+- `/wifiInfo`: Get details of devices registered for wifi.
+- `/addWifi`: Register a device to Amity wifi.
 
 ## Contributions
 
