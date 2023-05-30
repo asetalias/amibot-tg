@@ -2,10 +2,7 @@ from formatter.response_formatters import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     ContextTypes,
-    CommandHandler,
     ConversationHandler,
-    MessageHandler,
-    filters,
 )
 from controllers.db import create_profile
 from controllers.rpc_calls import *
