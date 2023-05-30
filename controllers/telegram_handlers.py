@@ -27,6 +27,12 @@ BUTTON_MARKUP = [
     [InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback")],
 ]
 
+ABOUT_MESSAGE = "AmiBot is a Telegram bot that provides an easy way to access Amizone. \nIt is brought to you by ALIAS."
+
+FEEDBACK_MESSAGE = """Submit feedback for all faculty, in one go 🚀
+        
+Type /feedback to get started."""
+
 FEEDBACK_INSTRUCTIONS = """\
 This method will submit feedback for all your faculty in a single step.
 
@@ -48,9 +54,8 @@ Please note that the same scores and comments will be used for all faculties wit
 # Query Handlers
 async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "about" in update.callback_query.data:
-        msg: str = "AmiBot is a Telegram bot that provides an easy way to access Amizone. \nIt is brought to you by ALIAS."
         await update.callback_query.message.reply_text(
-            msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+            ABOUT_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
 
     if "attendance" in update.callback_query.data:
@@ -66,7 +71,9 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await get_class_schedule_handler(update, context)
 
     if "faculty_feedback" in update.callback_query.data:
-        await fill_faculty_feedback_handler(update, context)
+        await update.callback_query.message.reply_text(
+            FEEDBACK_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+        )
 
 
 # Command Handlers
