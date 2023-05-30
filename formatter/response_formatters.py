@@ -44,7 +44,7 @@ def get_courses_formatter(response: pb.Courses) -> str:
         link = f"<a href='{course.syllabus_doc}'>Syllabus</a>"
         msg += f"{course.ref.code} \n"
         msg += f"{course.ref.name} \n"
-        msg += f"Marks : {course.internal_marks.have}/{course.internal_marks.max} \n"
+        msg += f"Marks : {course.internal_marks.have:.2f}/{course.internal_marks.max:.2f} \n"
         msg += f"{link} \n\n"
     return msg
 
