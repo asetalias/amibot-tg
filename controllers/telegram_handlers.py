@@ -1,6 +1,5 @@
 from formatter.response_formatters import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.constants import ParseMode
 from telegram.ext import (
     ContextTypes,
     ConversationHandler,
@@ -22,32 +21,10 @@ BUTTON_MARKUP = [
         InlineKeyboardButton("Current Course", callback_data="current_course"),
         InlineKeyboardButton("Class Schedule", callback_data="class_schedule"),
     ],
-    [
-        InlineKeyboardButton("Get WiFi info", callback_data="get_wifi_info"),
-        InlineKeyboardButton("Register for WiFi", callback_data="register_wifi"),
-    ],
     [InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback")],
 ]
 
 ABOUT_MESSAGE = "AmiBot is a Telegram bot that provides an easy way to access Amizone. \nIt is brought to you by ALIAS."
-
-WIFI_MESSAGE = """Register for wifi: add as many devices as you want!
-
-Type /addwifi to get started."""
-
-WIFI_INSTRUCTIONS = """\
-This method will register your device to Amity wifi.
-
-Reply with cancel to abort this operation, or with details in the following format:
-{MAC address} {override}
-
-where
-→ MAC address is the mac address of your device. Not sure how to find your MAC address? <a href='https://www.wikihow.com/Find-the-MAC-Address-of-Your-Computer'>Click here</a>
-→ TRUE or FALSE where true allows you to register for more than 2 devices
-
-Example:
-AA:BB:CC:DD:EE:FF true
-"""
 
 FEEDBACK_MESSAGE = """Submit feedback for all faculty, in one go 🚀
         
@@ -93,14 +70,6 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     if "faculty_feedback" in update.callback_query.data:
         await update.callback_query.message.reply_text(
             FEEDBACK_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
-        )
-
-    if "get_wifi_info" in update.callback_query.data:
-        await get_wifi_info_handler(update, context)
-
-    if "register_wifi" in update.callback_query.data:
-        await update.callback_query.message.reply_text(
-            WIFI_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
 
 
@@ -348,104 +317,5 @@ async def get_faculty_feedback(
         text=final,
         reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
     )
-
-    return ConversationHandler.END
-
-
-async def get_wifi_info_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    try:
-        await context.bot.send_message(
-            chat_id=user_id, text="Fetching WiFi information..."
-        )
-
-        response = await get_wifi_info(user_id)
-        if response is None:
-            # ! Need better exception handling
-            await context.bot.send_message(
-                chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-            )
-            return
-
-        msg = get_wifi_info_formatter(response)
-
-        await context.bot.send_message(
-            chat_id=user_id, text=msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
-        )
-    except Exception as e:
-        print(e)
-        await context.bot.send_message(
-            chat_id=user_id,
-            text="There was an error fetching WiFi information. Please try again later.",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-        )
-
-
-REGISTER_WIFI = range(1)
-
-
-async def register_wifi_entry(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> int:
-    user_id = update.effective_user.id
-    await context.bot.send_message(
-        chat_id=user_id, text=WIFI_INSTRUCTIONS, parse_mode=ParseMode.HTML
-    )
-    logger.info("Sent WiFi registration instructions")
-    return REGISTER_WIFI
-
-
-async def register_wifi_handler(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> int:
-    user_id = update.effective_user.id
-    user_response = update.message.text
-    user_response_args = user_response.split(" ")
-    logger.info("Received input for WiFi registration")
-
-    if len(user_response_args) != 2:
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {address} {override}",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-        )
-        return REGISTER_WIFI
-
-    try:
-        address = user_response_args[0]
-        override = user_response_args[1]
-        if not ("true" or "false" in override.lower()):
-            raise ValueError()
-        override = False if "false" in override.lower() else True
-
-        response = await register_wifi(user_id, address, override)
-        if response is None:
-            await context.bot.send_message(
-                chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-            )
-        else:
-            await context.bot.send_message(
-                chat_id=user_id,
-                text="Registered for wifi",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-            )
-
-    except ValueError:
-        await context.bot.send_message(
-            chat_id=user_id,
-            text="Invalid format or values. Please enter your response in the format: {address} {override} {comment} where address is the MAC address of the device you wish to add and override is True/Flase.",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-        )
-    except Exception as e:
-        print(e)
-        await context.bot.send_message(
-            chat_id=user_id,
-            text="There was an error filling faculty feedback. Please try again later.",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-        )
 
     return ConversationHandler.END
