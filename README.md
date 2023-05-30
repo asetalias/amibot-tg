@@ -40,9 +40,10 @@ Here are some of the features of Amibot-tg:
 
 ## Future Plans
 
-- **Allow students to schedule daily delivery of class schedules and attendance information:** In the future, Amibot-tg _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
-- **Automated Class Schedule:** Daily delivery of class schedule.
-- **Add to calender:** Add class schedule to calender.
+- [x] **Faculty feedback:** Amibot-tg targets a big pain point in the average Amity student's life: Faculty feedback. It can automate the process for you, filling feedback for all your faculties at once.
+- [ ] **Allow students to schedule daily delivery of class schedules and attendance information:** In the future, Amibot-tg _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
+- [ ] **Automated Class Schedule:** Daily delivery of class schedule.
+- [ ] **Add to calender:** Add class schedule to calender.
 
 ## Usage
 
