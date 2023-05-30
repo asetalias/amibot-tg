@@ -103,3 +103,26 @@ async def fill_faculty_feedback(
         return None
     finally:
         await channel.close()
+
+
+async def register_wifi(
+    telegram_id, mac_address, override_limit
+) -> pb.RegisterWifiMacRequest | None:
+    profile = await get_profile(telegram_id)
+    if profile is None:
+        return None
+
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
+    try:
+        response = await stub.RegisterWifiMac(
+            pb.RegisterWifiMacRequest(
+                address=mac_address, override_limit=override_limit
+            ),
+            metadata=metadata,
+        )
+        return response
+    except Exception as e:
+        logger.warning(f"From register_wifi: {e}")
+        return None
+    finally:
+        await channel.close()
