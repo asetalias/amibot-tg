@@ -5,6 +5,16 @@ import logging
 logger = logging.getLogger()
 
 
+def get_wifi_info_formatter(response: pb.WifiMacInfo) -> str:
+    logger.info("Formatting WiFi info from grpc")
+    message = "WiFi Info: \n\nRegistered adresses:\n"
+    for mac_address in response.addresses:
+        message += f"→ {mac_address} \n"
+    message += f"\nSlots: {response.slots} \n"
+    message += f"Free slots: {response.free_slots}"
+    return message
+
+
 def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
     logger.info("Formatting")
     msg = "Attendance Records: \n\n"
