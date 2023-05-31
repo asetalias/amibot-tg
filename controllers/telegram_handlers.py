@@ -51,7 +51,7 @@ AA:BB:CC:DD:EE:FF true
 
 FEEDBACK_MESSAGE = """Submit feedback for all faculty, in one go 🚀
         
-Type /feedback to get started."""
+Type /facultyFeedback to get started."""
 
 FEEDBACK_INSTRUCTIONS = """\
 This method will submit feedback for all your faculty in a single step.
