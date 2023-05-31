@@ -1,12 +1,15 @@
 from util.db_client import profile
+from util.encryption import encrypt, decrypt
 
 
 async def create_profile(telegram_id: int, username, password) -> str:
     data = await profile.find_one({"_id": telegram_id})
     if data != None:
-        resp = await update_profile(telegram_id, username, password)
+        encrypted_password = encrypt(password)
+        resp = await update_profile(telegram_id, username, encrypted_password)
         return resp
 
+    encrypted_password = encrypt(password)
     data = {"_id": telegram_id, "username": username, "password": password}
 
     try:
@@ -19,6 +22,7 @@ async def create_profile(telegram_id: int, username, password) -> str:
 async def get_profile(telegram_id: int) -> dict:
     try:
         data = await profile.find_one({"_id": telegram_id})
+        data["password"] = decrypt(data["password"])
         return data
     except Exception as e:
         print(e)
