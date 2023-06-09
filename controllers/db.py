@@ -10,7 +10,8 @@ async def create_profile(telegram_id: int, username, password) -> str:
         return resp
 
     encrypted_password = encrypt(password)
-    data = {"_id": telegram_id, "username": username, "password": password}
+    print(encrypted_password)
+    data = {"_id": telegram_id, "username": username, "password": encrypted_password}
 
     try:
         await profile.insert_one(data)
