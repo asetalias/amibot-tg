@@ -29,6 +29,9 @@ Here are some of the features of Amibot-tg:
 - Access Class schedule.
 - Access Exam Schedule.
 - Access Current Courses.
+- Get and Register Wifi Info.
+- Auto Faculty Feedback.
+
 
 ## What Makes Amibot-tg Different?
 
