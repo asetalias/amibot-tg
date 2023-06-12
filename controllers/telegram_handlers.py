@@ -199,7 +199,7 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if len(input_args) != 3:
         await update.message.reply_text(
-            "Invalid login command. \nUse the command like -> /login {amizone_id} {password} 837283 password."
+            "Invalid login command. \nUse the command like -> /login 837283 password."
         )
         return
 
@@ -214,12 +214,12 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         logger.info("Creating user profile for login validation")
-        str = await create_profile(user_id, username, password)
-        does_user_exist = await get_user_profile(user_id)
-        if does_user_exist:
+        await create_profile(user_id, username, password)
+        user = await get_user_profile(user_id)
+        if user:
             logger.info("User exists, logging in")
             await update.message.reply_text(
-                f"Successfully logged in\n\nWelcome to AmiBot {does_user_exist.name.split(' ')[0]}!",
+                f"Successfully logged in\n\nWelcome to AmiBot {user.name.split(' ')[0]}!",
                 reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             )
         else:
