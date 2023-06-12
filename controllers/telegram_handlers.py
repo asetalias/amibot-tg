@@ -352,6 +352,17 @@ async def get_faculty_feedback(
                 reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             )
 
+        final = (
+            "Feedback submitted successfully for "
+            + str(response.filled_for)
+            + " faculties."
+        )
+        await context.bot.send_message(
+            chat_id=user_id,
+            text=final,
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
+
     except ValueError:
         await context.bot.send_message(
             chat_id=user_id,
@@ -365,17 +376,6 @@ async def get_faculty_feedback(
             text="There was an error filling faculty feedback. Please try again later.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
-
-    final = (
-        "Feedback submitted successfully for "
-        + str(response.filled_for)
-        + " faculties."
-    )
-    await context.bot.send_message(
-        chat_id=user_id,
-        text=final,
-        reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-    )
 
     return ConversationHandler.END
 
