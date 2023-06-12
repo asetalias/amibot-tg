@@ -416,7 +416,9 @@ async def register_wifi_handler(
     user_response_args = user_response.split(" ")
     logger.info("Received input for WiFi registration")
 
-    if user_response_args == ["cancel"]:
+    cancelled = helpers.check_cancel(user_response_args)
+
+    if cancelled:
         await context.bot.send_message(
             chat_id=user_id,
             text="Operation cancelled",
@@ -424,13 +426,13 @@ async def register_wifi_handler(
         )
         return ConversationHandler.END
 
-    if len(user_response_args) != 2:
+    if len(user_response_args) != 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {address} {override} or type cancel to cancel the operation.",
+            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
-        return REGISTER_WIFI
+        return GET_FACULTY_FEEDBACK
 
     try:
         address = user_response_args[0]
