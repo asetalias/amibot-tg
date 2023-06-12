@@ -9,6 +9,7 @@ from controllers.db import create_profile
 from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
+from util import helpers
 
 logger = logging.getLogger()
 
@@ -140,8 +141,7 @@ async def get_class_schedule_handler(
             logger.debug(msg="Error fetching class schedule")
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
 
@@ -172,8 +172,7 @@ async def get_current_course_handler(
             # ! Need better exception handling
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
 
@@ -208,11 +207,27 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     password = input_args[2]
     user_id = update.effective_user.id
 
+    await context.bot.send_message(
+        chat_id=user_id,
+        text="Logging you in...",
+    )
+
     try:
-        str = await create_profile(user_id, username, password)
-        await update.message.reply_text(
-            "Successfully logged in", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
-        )
+        logger.info("Creating user profile for login validation")
+        await create_profile(user_id, username, password)
+        user = await get_user_profile(user_id)
+        if user:
+            logger.info("User exists, logging in")
+            await update.message.reply_text(
+                f"Successfully logged in\n\nWelcome to AmiBot {user.name.split(' ')[0]}!",
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            )
+        else:
+            logger.info("User does not exist, removing profile")
+            await remove_profile(user_id)
+            await update.message.reply_text(
+                f"Invalid username or password. Try again with correct credentials.",
+            )
     except Exception as e:
         print(e)
         await update.message.reply_text(
@@ -229,8 +244,7 @@ async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_T
         if response is None:
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
 
@@ -260,8 +274,7 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
             # ! Need better exception handling
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
 
@@ -299,7 +312,9 @@ async def get_faculty_feedback(
     user_response_args = user_response.split(" ")
     logger.info("Received input for faculty feedback")
 
-    if user_response_args == ["cancel"]:
+    cancelled = helpers.check_cancel(user_response_args)
+
+    if cancelled:
         await context.bot.send_message(
             chat_id=user_id,
             text="Operation cancelled",
@@ -310,8 +325,7 @@ async def get_faculty_feedback(
     if len(user_response_args) != 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment}",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.",
         )
         return GET_FACULTY_FEEDBACK
 
@@ -328,15 +342,24 @@ async def get_faculty_feedback(
         if response is None:
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
+
+        final = (
+            "Feedback submitted successfully for "
+            + str(response.filled_for)
+            + " faculties."
+        )
+        await context.bot.send_message(
+            chat_id=user_id,
+            text=final,
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
 
     except ValueError:
         await context.bot.send_message(
             chat_id=user_id,
-            text="Invalid format or values. Please enter your response in the format: {rating} {query rating} {comment} where rating is an integer between 1 and 5, and query rating is an integer between 1 and 3.",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            text="Invalid format or values. Please enter your response in the format: {rating} {query rating} {comment} where rating is an integer between 1 and 5, and query rating is an integer between 1 and 3.\nType cancel to cancel the operation.",
         )
     except Exception as e:
         print(e)
@@ -345,17 +368,6 @@ async def get_faculty_feedback(
             text="There was an error filling faculty feedback. Please try again later.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
-
-    final = (
-        "Feedback submitted successfully for "
-        + str(response.filled_for)
-        + " faculties."
-    )
-    await context.bot.send_message(
-        chat_id=user_id,
-        text=final,
-        reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
-    )
 
     return ConversationHandler.END
 
@@ -372,8 +384,7 @@ async def get_wifi_info_handler(update: Update, context: ContextTypes.DEFAULT_TY
             # ! Need better exception handling
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
 
@@ -413,7 +424,9 @@ async def register_wifi_handler(
     user_response_args = user_response.split(" ")
     logger.info("Received input for WiFi registration")
 
-    if user_response_args == ["cancel"]:
+    cancelled = helpers.check_cancel(user_response_args)
+
+    if cancelled:
         await context.bot.send_message(
             chat_id=user_id,
             text="Operation cancelled",
@@ -421,13 +434,12 @@ async def register_wifi_handler(
         )
         return ConversationHandler.END
 
-    if len(user_response_args) != 2:
+    if len(user_response_args) != 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {address} {override}",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.\nType cancel to cancel the operation.",
         )
-        return REGISTER_WIFI
+        return GET_FACULTY_FEEDBACK
 
     try:
         address = user_response_args[0]
@@ -440,8 +452,7 @@ async def register_wifi_handler(
         if response is None:
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login to login.",
-                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
         else:
             await context.bot.send_message(
@@ -453,8 +464,7 @@ async def register_wifi_handler(
     except ValueError:
         await context.bot.send_message(
             chat_id=user_id,
-            text="Invalid format or values. Please enter your response in the format: {address} {override} {comment} where address is the MAC address of the device you wish to add and override is True/Flase.",
-            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            text="Invalid format or values. Please enter your response in the format: {address} {override} {comment} where address is the MAC address of the device you wish to add and override is True/Flase.\nType cancel to cancel the operation.",
         )
     except Exception as e:
         print(e)
