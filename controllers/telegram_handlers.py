@@ -9,6 +9,7 @@ from controllers.db import create_profile
 from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
+from util import helpers
 
 logger = logging.getLogger()
 
@@ -299,7 +300,9 @@ async def get_faculty_feedback(
     user_response_args = user_response.split(" ")
     logger.info("Received input for faculty feedback")
 
-    if user_response_args == ["cancel"]:
+    cancelled = helpers.check_cancel(user_response_args)
+
+    if cancelled:
         await context.bot.send_message(
             chat_id=user_id,
             text="Operation cancelled",
@@ -310,7 +313,7 @@ async def get_faculty_feedback(
     if len(user_response_args) != 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment}",
+            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
         return GET_FACULTY_FEEDBACK
@@ -424,7 +427,7 @@ async def register_wifi_handler(
     if len(user_response_args) != 2:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {address} {override}",
+            text="Invalid format. Please enter your response in the format: {address} {override} or type cancel to cancel the operation.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
         return REGISTER_WIFI
