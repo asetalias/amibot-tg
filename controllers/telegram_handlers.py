@@ -209,11 +209,28 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     password = input_args[2]
     user_id = update.effective_user.id
 
+    await context.bot.send_message(
+        chat_id=user_id,
+        text="Logging you in...",
+    )
+
     try:
+        logger.info("Creating user profile for login validation")
         str = await create_profile(user_id, username, password)
-        await update.message.reply_text(
-            "Successfully logged in", reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
-        )
+        does_user_exist = await get_user_profile(user_id)
+        if does_user_exist:
+            logger.info("User exists, logging in")
+            await update.message.reply_text(
+                f"Successfully logged in\n\nWelcome to AmiBot {does_user_exist.name.split(' ')[0]}!",
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            )
+        else:
+            logger.info("User does not exist, removing profile")
+            await remove_profile(user_id)
+            await update.message.reply_text(
+                f"Invalid username or password",
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            )
     except Exception as e:
         print(e)
         await update.message.reply_text(
