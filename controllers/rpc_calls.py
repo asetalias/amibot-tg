@@ -4,8 +4,39 @@ from util.stub import stubber
 from datetime import date
 from google.type import date_pb2 as _date_pb2
 import logging
+from . import db
 
 logger = logging.getLogger()
+
+
+async def remove_profile(telegram_id: int):
+    logger.info("Removing profile")
+    profile = await get_profile(telegram_id)
+    if profile is None:
+        logger.info("Profile not found, nothing to delete")
+    else:
+        await db.delete_profile(telegram_id)
+        logger.info("Profile deleted successfully")
+
+
+async def get_user_profile(telegram_id: int):
+    logger.info("Getting user profile")
+    profile = await db.get_profile(telegram_id)
+    if profile is None:
+        logger.info("User does not exist")
+        return None
+
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
+
+    try:
+        logger.info("Getting user profile via grpc")
+        response = await stub.GetUserProfile(pb.EmptyMessage(), metadata=metadata)
+        return response
+    except Exception as e:
+        print(e.with_traceback(e.__traceback__))
+        return None
+    finally:
+        channel.close()
 
 
 async def get_class_schedule(telegram_id: int) -> pb.ScheduledClasses | None:
