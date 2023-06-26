@@ -29,4 +29,3 @@ extend-exclude = '''
   ^/gen
 )
 '''
-
