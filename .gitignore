@@ -165,3 +165,4 @@ tempCodeRunnerFile*
 Dockerfile
 app.env
 fly.toml
+dev.env

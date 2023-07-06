@@ -17,17 +17,21 @@ BUTTON_MARKUP = [
     [InlineKeyboardButton("About", callback_data="about")],
     [
         InlineKeyboardButton("Attendance", callback_data="attendance"),
-        InlineKeyboardButton("Exam Schedule", callback_data="exam"),
+        InlineKeyboardButton("Class Schedule", callback_data="class_schedule"),
+        
     ],
     [
         InlineKeyboardButton("Current Course", callback_data="current_course"),
-        InlineKeyboardButton("Class Schedule", callback_data="class_schedule"),
+        InlineKeyboardButton("Tomorrow Schedule", callback_data="tomorrow_schedule"),
     ],
     [
         InlineKeyboardButton("Get WiFi info", callback_data="get_wifi_info"),
         InlineKeyboardButton("Register for WiFi", callback_data="register_wifi"),
     ],
-    [InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback")],
+    [
+        InlineKeyboardButton("Exam Schedule", callback_data="exam"),
+        InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback"),
+    ],
 ]
 
 ABOUT_MESSAGE = "AmiBot is a Telegram bot that provides an easy way to access Amizone. \nIt is brought to you by ALIAS."
@@ -82,14 +86,17 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     if "attendance" in update.callback_query.data:
         await get_attendance_handler(update, context)
 
-    if "exam" in update.callback_query.data:
-        await get_exam_schedule_handler(update, context)
-
     if "current_course" in update.callback_query.data:
         await get_current_course_handler(update, context)
 
     if "class_schedule" in update.callback_query.data:
         await get_class_schedule_handler(update, context)
+
+    if "tomorrow_schedule" in update.callback_query.data:
+        await get_class_schedule_handler(update, context, tomorrow=True)
+    
+    if "exam" in update.callback_query.data:
+        await get_exam_schedule_handler(update, context)
 
     if "faculty_feedback" in update.callback_query.data:
         await update.callback_query.message.reply_text(
@@ -127,15 +134,11 @@ async def continue_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def get_class_schedule_handler(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False):
     user_id = update.effective_user.id
     try:
-        await context.bot.send_message(
-            chat_id=user_id, text="Fetching class schedule..."
-        )
-        response = await get_class_schedule(user_id)
+        await context.bot.send_message(chat_id=user_id, text="Fetching class schedule...")
+        response = await get_class_schedule(user_id, tomorrow = tomorrow)
         if response is None:
             # ! Need better exception handling
             logger.debug(msg="Error fetching class schedule")
