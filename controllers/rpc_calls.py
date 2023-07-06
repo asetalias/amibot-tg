@@ -39,7 +39,7 @@ async def get_user_profile(telegram_id: int):
         channel.close()
 
 
-async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.x | None:
+async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.ScheduledClass | None:
     profile = await get_profile(telegram_id)
     if profile is None:
         return None
@@ -58,11 +58,6 @@ async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.x | None:
         response = await stub.GetClassSchedule(
             pb.ClassScheduleRequest(date=val), metadata=metadata
         )
-
-        if response is None:
-            print("No classes today")
-        else:
-            print("Classes today")
 
         return response
     except Exception as e:
