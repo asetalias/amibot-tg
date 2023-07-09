@@ -199,7 +199,7 @@ async def get_current_course_handler(
 async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     input_text = update.message.text
     input_args = input_text.split(" ")
-
+        
     if len(input_args) != 3:
         await update.message.reply_text(
             "Invalid login command. \nUse the command like -> /login 837283 password."
@@ -236,6 +236,8 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "There was an error logging in. Please try again later."
         )
+        
+    await update.message.delete()
 
 
 async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
