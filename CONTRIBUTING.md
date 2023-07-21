@@ -97,6 +97,10 @@ If you want to automatically restart the bot whenever you make changes to the co
 make dev
 ```
 
+## Go Amizone
+
+This project uses [go-amizone](https://github.com/ditsuke/go-amizone) via gRPC to get its data. While knowledge of gRPC isn't a requirement, you can test how we get data through this [Postman collection](postman.com/ditsuke/workspace/ditsuke/)
+
 ## Usage
 
 Once the bot is up and running, you can use the following commands to interact with it:
