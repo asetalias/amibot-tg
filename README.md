@@ -15,6 +15,7 @@ Amibot-tg is a chat bot that provides a faster and more reliable alternative to 
 - [Amibot-tg](#amibot-tg)
   - [Table of contents](#table-of-contents)
   - [Features](#features)
+  - [Screenshots](#screenshots)
   - [What Makes Amibot-tg Different?](#what-makes-amibot-tg-different)
   - [Future Plans](#future-plans)
   - [Usage](#usage)
@@ -31,6 +32,12 @@ Here are some of the features of Amibot-tg:
 - Access Current Courses.
 - Get and Register Wifi Info.
 - Auto Faculty Feedback.
+
+## Screenshots
+<img width="396" alt="Screenshot 2023-07-30 at 2 33 16 PM" src="https://github.com/asetalias/amibot-tg/assets/14011425/0ea0d3ef-f176-4e45-b73b-4d310b77c435">
+<img width="396" alt="Screenshot 2023-07-30 at 2 34 09 PM" src="https://github.com/asetalias/amibot-tg/assets/14011425/1ab9e922-ad97-40e5-8f53-425e7860a873">
+
+
 
 
 ## What Makes Amibot-tg Different?
