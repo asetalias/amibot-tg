@@ -272,21 +272,29 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
         )
 
         response = await get_exam_schedule(user_id)
-        if response is None:
+
+        if response == "not_logged":
+            await context.bot.send_message(
+            chat_id=user_id,
+            text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
+            )
+            return
+        elif response is None:
             # ! Need better exception handling
             await context.bot.send_message(
                 chat_id=user_id,
-                text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
+                text="No Exams! Chill......🤓",
             )
             return
+        else:
+            msg = get_exam_formatter(response)
 
-        msg = get_exam_formatter(response)
-
-        await context.bot.send_message(
-            chat_id=user_id, text=msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
-        )
+            await context.bot.send_message(
+                chat_id=user_id, text=msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+            )
     except Exception as e:
         print(e)
+        
         await context.bot.send_message(
             chat_id=user_id,
             text="There was an error fetching exam schedule. Please try again later.",
