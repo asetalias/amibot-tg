@@ -1,6 +1,6 @@
 # Amibot-tg
 
-[![Telegram](https://img.shields.io/static/v1?logo=Telegram&logoColor=fff&labelColor=1e96d1&label=Amibot&message=⬅️%20Click%20to%20use%20&color=50524f)](https://t.me/Achintya_test_bot)
+[![Telegram](https://img.shields.io/static/v1?logo=Telegram&logoColor=fff&labelColor=1e96d1&label=Amibot&message=⬅️%20Click%20to%20use%20&color=50524f)](https://t.me/AmiAliasBot)
 
 [![Issues](https://img.shields.io/github/issues/achintya-7/amibot-tg?logo=github)](https://github.com/achintya-7/amibot-tg/issues)
 [![License](https://img.shields.io/github/license/achintya-7/amibot-tg)](./LICENSE)
