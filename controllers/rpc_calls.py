@@ -95,10 +95,10 @@ async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
         await channel.close()
 
 
-async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None:
+async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     try:
