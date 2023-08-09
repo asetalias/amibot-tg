@@ -1,7 +1,7 @@
 from controllers.db import get_profile
 import gen.amizone_pb2 as pb
 from util.stub import stubber
-from datetime import date
+from datetime import date, timedelta
 from google.type import date_pb2 as _date_pb2
 import logging
 from . import db
@@ -39,14 +39,18 @@ async def get_user_profile(telegram_id: int):
         channel.close()
 
 
-async def get_class_schedule(telegram_id: int) -> pb.ScheduledClasses | None:
+async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.ScheduledClass | None:
     profile = await get_profile(telegram_id)
     if profile is None:
         return None
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
 
-    today = date.today()
+    if tomorrow:
+        today = date.today() + timedelta(days=1)
+    else:
+        today = date.today() 
+
     val = _date_pb2.Date(year=today.year, month=today.month, day=today.day)
 
     try:
@@ -54,6 +58,7 @@ async def get_class_schedule(telegram_id: int) -> pb.ScheduledClasses | None:
         response = await stub.GetClassSchedule(
             pb.ClassScheduleRequest(date=val), metadata=metadata
         )
+
         return response
     except Exception as e:
         print(e.with_traceback(e.__traceback__))

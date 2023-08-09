@@ -29,7 +29,7 @@ To use Amibot-tg, you'll need:
 - Miscellaneos:
   - [Poetry](https://python-poetry.org/docs/)
   - [Nodemon](https://nodemon.io/)
-  - Docker
+  - [Docker](https://www.docker.com/)
 
 ## Getting started
 
@@ -53,6 +53,8 @@ cd Amibot-tg
     ```shell
     npm install -g nodemon
     ```
+
+3. [Install docker](https://www.docker.com/). While knowing docker isn't a prerequisite, you have to install and run docker in the background in order to use MongoDB.
 
 ## Updating the Token
 
@@ -96,6 +98,10 @@ If you want to automatically restart the bot whenever you make changes to the co
 ```shell
 make dev
 ```
+
+## Go Amizone
+
+This project uses [go-amizone](https://github.com/ditsuke/go-amizone) via gRPC to get its data. While knowledge of gRPC isn't a requirement, you can test how we get data through this [Postman collection](postman.com/ditsuke/workspace/ditsuke/)
 
 ## Usage
 

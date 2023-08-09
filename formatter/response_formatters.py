@@ -51,7 +51,7 @@ def get_courses_formatter(response: pb.Courses) -> str:
 
 def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
     logger.info("Formatting")
-    msg = "Class Schedule: \n\n"
+    msg = "Class Schedule: " + peaker(response.classes) + "\n\n"
     for index in response.classes:
         start = datetime.fromtimestamp(index.start_time.seconds)
         end = datetime.fromtimestamp(index.end_time.seconds)
@@ -79,3 +79,10 @@ def attendance_responder(val: pb.AttendanceState) -> str:
 
     else:
         return "🟡"
+
+
+def peaker(classes) -> str:
+    response = ""
+    for item in classes:
+        response += attendance_responder(item.attendance)
+    return response
