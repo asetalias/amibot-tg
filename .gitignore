@@ -163,7 +163,6 @@ cython_debug/
 .vscode/
 tempCodeRunnerFile*
 Dockerfile
-Dockerfile
 app.env
-.gitignore
+fly.toml
 dev.env

@@ -1,6 +1,6 @@
 # Amibot-tg
 
-[![Telegram](https://img.shields.io/static/v1?logo=Telegram&logoColor=fff&labelColor=1e96d1&label=Amibot&message=⬅️%20Click%20to%20use%20&color=50524f)](https://t.me/Achintya_test_bot)
+[![Telegram](https://img.shields.io/static/v1?logo=Telegram&logoColor=fff&labelColor=1e96d1&label=Amibot&message=⬅️%20Click%20to%20use%20&color=50524f)](https://t.me/AmiAliasBot)
 
 [![Issues](https://img.shields.io/github/issues/achintya-7/amibot-tg?logo=github)](https://github.com/achintya-7/amibot-tg/issues)
 [![License](https://img.shields.io/github/license/achintya-7/amibot-tg)](./LICENSE)
@@ -15,6 +15,7 @@ Amibot-tg is a chat bot that provides a faster and more reliable alternative to 
 - [Amibot-tg](#amibot-tg)
   - [Table of contents](#table-of-contents)
   - [Features](#features)
+  - [Screenshots](#screenshots)
   - [What Makes Amibot-tg Different?](#what-makes-amibot-tg-different)
   - [Future Plans](#future-plans)
   - [Usage](#usage)
@@ -29,6 +30,15 @@ Here are some of the features of Amibot-tg:
 - Access Class schedule.
 - Access Exam Schedule.
 - Access Current Courses.
+- Get and Register Wifi Info.
+- Auto Faculty Feedback.
+
+## Screenshots
+<img width="396" alt="Screenshot 2023-07-30 at 2 33 16 PM" src="https://github.com/asetalias/amibot-tg/assets/14011425/0ea0d3ef-f176-4e45-b73b-4d310b77c435">
+<img width="396" alt="Screenshot 2023-07-30 at 2 34 09 PM" src="https://github.com/asetalias/amibot-tg/assets/14011425/1ab9e922-ad97-40e5-8f53-425e7860a873">
+
+
+
 
 ## What Makes Amibot-tg Different?
 
@@ -41,9 +51,9 @@ Here are some of the features of Amibot-tg:
 ## Future Plans
 
 - [x] **Faculty feedback:** Amibot-tg targets a big pain point in the average Amity student's life: Faculty feedback. It can automate the process for you, filling feedback for all your faculties at once.
-- [ ] **Allow students to schedule daily delivery of class schedules and attendance information:** In the future, Amibot-tg _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
-- [ ] **Automated Class Schedule:** Daily delivery of class schedule.
+- [ ] **Scheduled daily delivery of schedule and attendance:** In the future, Amibot-tg _might_ allow you to schedule daily delivery of your class schedule and attendance information via a Telegram message.
 - [ ] **Add to calender:** Add class schedule to calender.
+- [ ] **Get schedule for a specific day of the month** 
 
 ## Usage
 
