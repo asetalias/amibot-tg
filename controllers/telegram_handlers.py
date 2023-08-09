@@ -273,7 +273,7 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
 
         response = await get_exam_schedule(user_id)
 
-        if response == "not_logged":
+        if response == "not_logged_in":
             await context.bot.send_message(
             chat_id=user_id,
             text="You are not logged in. Use /login {amizone_id} {password} to login.",
