@@ -6,12 +6,21 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
-from util.env import TOKEN
+from util.env import TOKEN, SENTRY_DSN, dev_mode
 from controllers.telegram_handlers import *
 import logging
+import sentry_sdk
 
 
 def main():
+    
+    # Sentry, skip for dev mode
+    if not dev_mode:
+        sentry_sdk.init(
+            dsn=SENTRY_DSN,
+            traces_sample_rate=1.0,
+        )
+
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
