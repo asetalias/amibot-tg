@@ -1,3 +1,5 @@
+import random
+
 def check_cancel(lst):
     """Check if the user has cancelled the operation.
 
@@ -10,3 +12,6 @@ def check_cancel(lst):
         if word.lower() == "cancel":
             return True
     return False
+
+def get_random() -> int:
+    return random.randint(1000, 9999)

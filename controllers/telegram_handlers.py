@@ -5,7 +5,7 @@ from telegram.ext import (
     ContextTypes,
     ConversationHandler,
 )
-from controllers.db import create_profile
+from controllers.db import *
 from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
@@ -14,7 +14,10 @@ from util import helpers
 logger = logging.getLogger()
 
 BUTTON_MARKUP = [
-    [InlineKeyboardButton("About", callback_data="about")],
+    [
+        InlineKeyboardButton("About", callback_data="about"),
+        InlineKeyboardButton("WearOS", callback_data="wearos"),
+    ],
     [
         InlineKeyboardButton("Attendance", callback_data="attendance"),
         InlineKeyboardButton("Class Schedule", callback_data="class_schedule"),
@@ -82,6 +85,9 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await update.callback_query.message.reply_text(
             ABOUT_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
+
+    if "wearos" in update.callback_query.data:
+        await wearos_token_handler(update, context)
 
     if "attendance" in update.callback_query.data:
         await get_attendance_handler(update, context)
@@ -238,6 +244,45 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
     await update.message.delete()
+
+async def wearos_token_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+
+    try:
+        profile = await get_profile(user_id)
+        if profile is None:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text="You are not logged in. Use /login {amizone_id} {password} to login.",
+            )
+            return
+
+        for i in range(3):
+            token = helpers.get_random()
+            
+            val = await checkToken(profile["_id"], token)
+            
+            if val:
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text=f"Your token is {token}. Please enter this token in the WearOS app.",
+                )
+                return
+
+
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="There was an error generating token. Please try again later.",
+        )
+
+    except Exception as e:
+        logger.error(e)
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="There was an error fetching your profile. Please try again later.",
+        )
+        return
+        
 
 
 async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
