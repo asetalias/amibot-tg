@@ -51,7 +51,10 @@ def get_courses_formatter(response: pb.Courses) -> str:
 
 def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
     logger.info("Formatting")
-    msg = "Class Schedule: " + peaker(response.classes) + "\n\n"
+    
+    attendance_indicators = ''
+    msg = "Class Schedule: \n\n"
+
     for index in response.classes:
         start = datetime.fromtimestamp(index.start_time.seconds)
         end = datetime.fromtimestamp(index.end_time.seconds)
@@ -59,12 +62,14 @@ def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
         msg += f"{index.course.name} \n"
         msg += f"{start.strftime('%H:%M')} to {end.strftime('%H:%M')} \n"
         msg += f"{index.faculty} \n"
+        indicator = attendance_responder(index.attendance)
         msg += (
             f"{index.room} \n"
-            + f"Attendance : {attendance_responder(index.attendance)}"
+            + f"Attendance : {indicator}"
         )
         msg += "\n\n"
-    return msg
+        attendance_indicators += indicator
+    return attendance_indicators + '\n' + msg
 
 
 def attendance_responder(val: pb.AttendanceState) -> str:
