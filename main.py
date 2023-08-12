@@ -58,7 +58,7 @@ def api():
 
         return {"classes": classes}
 
-    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "0.0.0.0", "port": 8081})
+    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "0.0.0.0", "port": 2205})
     server_thread.start()
 
 def main():

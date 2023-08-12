@@ -64,7 +64,7 @@ async def get_profile(telegram_id: int) -> dict:
         data["password"] = decrypt(data["password"])
         return data
     except Exception as e:
-        print(e)
+        logger.error(e)
         return str(e)
 
 
