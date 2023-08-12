@@ -55,11 +55,10 @@ def api():
                 "time": f"{start.strftime('%H:%M')} to {end.strftime('%H:%M')}",
                 "faculty": i.faculty,
             })
-        print(classes)
 
         return {"classes": classes}
 
-    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "0.0.0.0", "port": 8000})
+    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "0.0.0.0", "port": 8081})
     server_thread.start()
 
 def main():

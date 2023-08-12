@@ -12,5 +12,6 @@ RUN poetry config virtualenvs.create false && poetry install --only main --no-ro
 
 COPY . /app
 
+EXPOSE 8081
 
 CMD ["poetry", "run", "python", "main.py"]
