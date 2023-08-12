@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-dev_mode = False
+dev_mode = True
 
 if dev_mode:
     load_dotenv("dev.env")

@@ -38,6 +38,27 @@ async def get_user_profile(telegram_id: int):
     finally:
         channel.close()
 
+async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
+    try:
+        logger.info("Getting schedule")
+
+        stub, metadata, channel = stubber(profile["username"], profile["password"])
+
+        today = date.today() + timedelta(days=2)
+        val = _date_pb2.Date(year=today.year, month=today.month, day=today.day)
+
+        logger.info("Getting class schedule via grpc")
+        response = await stub.GetClassSchedule(
+            pb.ClassScheduleRequest(date=val), 
+            metadata=metadata,
+        )
+
+        return response
+        
+    except Exception as e:
+        logger.error(e)
+        return None
+
 
 async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.ScheduledClass | None:
     profile = await get_profile(telegram_id)
