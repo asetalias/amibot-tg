@@ -44,7 +44,7 @@ async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
 
         stub, metadata, channel = stubber(profile["username"], profile["password"])
 
-        today = date.today()
+        today = date.today() + timedelta(days=2)
         val = _date_pb2.Date(year=today.year, month=today.month, day=today.day)
 
         logger.info("Getting class schedule via grpc")

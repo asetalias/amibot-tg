@@ -9,10 +9,10 @@ from telegram.ext import (
 from util.env import TOKEN, SENTRY_DSN, dev_mode
 from controllers.telegram_handlers import *
 from controllers.api import wear_os_controllers
+from controllers.db import get_profile_via_token
 import logging
 import sentry_sdk
-
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 import threading
@@ -28,6 +28,15 @@ def api():
     async def index():
         return "Hello World!"
 
+    @app.post("/login")
+    async def login(data: Data):
+        profile = await get_profile_via_token(data.token)
+        if profile is None:
+            raise HTTPException(status_code=404, detail="Profile not found")
+        
+        return {"status": "success", "message": "Logged in successfully"}
+
+
     @app.post("/class_schedule")
     async def class_schedule(data: Data):
         schedule = await wear_os_controllers.get_class_schedule_api(data.token)
@@ -40,15 +49,17 @@ def api():
             start = datetime.fromtimestamp(i.start_time.seconds)
             end = datetime.fromtimestamp(i.end_time.seconds)
             classes.append({
+                "attendance": i.attendance,
                 "course_code": i.course.code,
                 "course_name": i.course.name,
                 "time": f"{start.strftime('%H:%M')} to {end.strftime('%H:%M')}",
                 "faculty": i.faculty,
             })
+        print(classes)
 
         return {"classes": classes}
 
-    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "0.0.0.0", "port": 5001})
+    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "0.0.0.0", "port": 8000})
     server_thread.start()
 
 def main():
