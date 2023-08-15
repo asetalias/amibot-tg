@@ -21,6 +21,7 @@ func main() {
 
 	server := api.NewServer(collection, config)
 
+	log.Println("Starting server...")
 	err = server.Start()
 	if err != nil {
 		log.Fatal("Cannot start server:", err)
