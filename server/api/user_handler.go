@@ -91,10 +91,15 @@ func (s *Server) classScheduleHandler(c *gin.Context) {
 
 	year, month, day := time.Now().Date()
 
-	schedule, err := amizoneClient.GetClassSchedule(year, month, day+1)
+	schedule, err := amizoneClient.GetClassSchedule(year, month, day)
 	if err != nil {
 		log.Println("Cannot get class schedule: ", err)
 		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	if (len(schedule)) == 0 {
+		c.JSON(http.StatusNoContent, res)
+		return
 	}
 
 	for _, class := range schedule {
