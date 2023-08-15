@@ -3,7 +3,7 @@ WORKDIR /app
 COPY ./server .
 RUN go build -o main main.go 
 
-FROM python:3.11-slim
+FROM python:3.11-alpine
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY pyproject.toml poetry.lock app.env /app/
