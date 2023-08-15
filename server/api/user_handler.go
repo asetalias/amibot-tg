@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/ditsuke/go-amizone/amizone"
+	"github.com/ditsuke/go-amizone/amizone/models"
 	"github.com/fernet/fernet-go"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -47,9 +48,18 @@ type userProfile struct {
 	Password string `json:"password"`
 }
 
+type classScheduleRes struct {
+	CourseName string                 `json:"courseName"`
+	CourseCode string                 `json:"courseCode"`
+	Time       string                 `json:"time"`
+	Faculty    string                 `json:"faculty"`
+	Attendance models.AttendanceState `json:"attendance"`
+}
+
 func (s *Server) classScheduleHandler(c *gin.Context) {
 	var req request
 	var user userProfile
+	var res []classScheduleRes
 
 	err := c.BindJSON(&req)
 	if err != nil {
@@ -81,11 +91,26 @@ func (s *Server) classScheduleHandler(c *gin.Context) {
 
 	year, month, day := time.Now().Date()
 
-	schedule, err := amizoneClient.GetClassSchedule(year, month, day)
+	schedule, err := amizoneClient.GetClassSchedule(year, month, day+1)
 	if err != nil {
 		log.Println("Cannot get class schedule: ", err)
 		c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	c.JSON(http.StatusOK, schedule)
+	for _, class := range schedule {
+		startTime := class.StartTime.Format("15:04")
+		endTime := class.EndTime.Format("15:04")
+
+		classItem := classScheduleRes{
+			CourseName: class.Course.Name,
+			CourseCode: class.Course.Code,
+			Time:       startTime + " : " + endTime,
+			Faculty:    class.Faculty,
+			Attendance: class.Attended,
+		}
+
+		res = append(res, classItem)
+	}
+
+	c.JSON(http.StatusOK, res)
 }
