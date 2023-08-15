@@ -11,4 +11,4 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false && poetry install --only main --no-root
 COPY . /app
 EXPOSE 3333
-CMD ["./main", "&", "poetry", "run", "python", "main.py"]
+CMD ["sh", "-c", "poetry run python main.py & ./main"]
