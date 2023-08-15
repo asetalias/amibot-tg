@@ -20,6 +20,7 @@ func NewServer(collection *mongo.Collection, config utils.Config) *Server {
 }
 
 func (s *Server) setupRoutes() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	defer func() {
 		s.router = r
@@ -31,5 +32,5 @@ func (s *Server) setupRoutes() {
 }
 
 func (s *Server) Start() error {
-	return s.router.Run(":3333")
+	return s.router.Run("0.0.0.0:3333")
 }
