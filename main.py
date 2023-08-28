@@ -8,9 +8,9 @@ from telegram.ext import (
 )
 from util.env import TOKEN, SENTRY_DSN, dev_mode
 from controllers.telegram_handlers import *
+from controllers.db import get_profile_via_token
 import logging
 import sentry_sdk
-
 
 def main():
     
@@ -29,7 +29,6 @@ def main():
     logger = logging.getLogger()
 
     logger.info("Starting bot...")
-
     app = Application.builder().token(TOKEN).build()
 
     # Commands
@@ -72,3 +71,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
