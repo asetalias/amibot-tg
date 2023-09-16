@@ -6,27 +6,29 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
-from util.env import TOKEN, SENTRY_DSN, dev_mode
+from util.env import TOKEN, SENTRY_DSN, DEV_MODE
 from controllers.telegram_handlers import *
 from controllers.db import get_profile_via_token
 import logging
 import sentry_sdk
 
 def main():
-    
-    # Sentry, skip for dev mode
-    if not dev_mode:
-        sentry_sdk.init(
-            dsn=SENTRY_DSN,
-            traces_sample_rate=1.0,
-        )
+        
+    logger = logging.getLogger()
 
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
     )
+    
+    # Sentry, skip for dev mode
+    if not DEV_MODE and not SENTRY_DSN == "":
+        logger.info("Starting sentry...")
+        sentry_sdk.init(
+            dsn=SENTRY_DSN,
+            traces_sample_rate=1.0,
+        )
 
-    logger = logging.getLogger()
 
     logger.info("Starting bot...")
     app = Application.builder().token(TOKEN).build()
