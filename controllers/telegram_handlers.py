@@ -493,12 +493,12 @@ async def register_wifi_handler(
         )
         return ConversationHandler.END
 
-    if len(user_response_args) != 3:
+    if len(user_response_args) != 2:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.\nType cancel to cancel the operation.",
         )
-        return GET_FACULTY_FEEDBACK
+        return REGISTER_WIFI
 
     try:
         address = user_response_args[0]
