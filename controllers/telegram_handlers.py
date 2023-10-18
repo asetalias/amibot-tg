@@ -384,7 +384,7 @@ async def get_faculty_feedback(
     if len(user_response_args) != 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.",
+            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to abort the operation.",
         )
         return GET_FACULTY_FEEDBACK
 
@@ -418,7 +418,7 @@ async def get_faculty_feedback(
     except ValueError:
         await context.bot.send_message(
             chat_id=user_id,
-            text="Invalid format or values. Please enter your response in the format: {rating} {query rating} {comment} where rating is an integer between 1 and 5, and query rating is an integer between 1 and 3.\nType cancel to cancel the operation.",
+            text="Invalid format or values. Please enter your response in the format: {rating} {query rating} {comment} where rating is an integer between 1 and 5, and query rating is an integer between 1 and 3.\nType cancel to abort the operation.",
         )
     except Exception as e:
         print(e)
@@ -496,7 +496,7 @@ async def register_wifi_handler(
     if len(user_response_args) != 2:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to cancel the operation.\nType cancel to cancel the operation.",
+            text="Invalid format. Please enter your response in the format:\n{MAC Address} {true/false}.\nType cancel to abort the operation.",
         )
         return REGISTER_WIFI
 
@@ -523,13 +523,13 @@ async def register_wifi_handler(
     except ValueError:
         await context.bot.send_message(
             chat_id=user_id,
-            text="Invalid format or values. Please enter your response in the format: {address} {override} {comment} where address is the MAC address of the device you wish to add and override is True/Flase.\nType cancel to cancel the operation.",
+            text="Invalid format or values. Please enter your response in the format: {address} {override} where address is the MAC address of the device you wish to add and override is True/Flase.\nType cancel to abort the operation.",
         )
     except Exception as e:
         print(e)
         await context.bot.send_message(
             chat_id=user_id,
-            text="There was an error filling faculty feedback. Please try again later.",
+            text="There was an error registering your MAC address on amizone. Please try again later.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
 
