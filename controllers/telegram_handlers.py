@@ -153,8 +153,11 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
                 text="There was an error, maybe you are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
-
-        msg = get_class_schedule_formatter(response)
+        if len(response.classes) == 0:
+            msg = "Enjoy your class-free day! 😄🎉"
+        else:
+            msg = get_class_schedule_formatter(response)
+        
 
         await context.bot.send_message(
             chat_id=user_id, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), text=msg
