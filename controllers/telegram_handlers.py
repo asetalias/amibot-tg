@@ -381,7 +381,7 @@ async def get_faculty_feedback(
         )
         return ConversationHandler.END
 
-    if len(user_response_args) != 3:
+    if len(user_response_args) < 3:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="Invalid format. Please enter your response in the format: {rating} {query rating} {comment} or type cancel to abort the operation.",
