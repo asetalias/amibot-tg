@@ -33,7 +33,12 @@ def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
         date = datetime.fromtimestamp(exam.time.seconds)
         msg += f"{exam.course.code} \n"
         msg += f"{exam.course.name} \n"
-        msg += f"{date.strftime('%d %b %Y')} \n\n"
+        msg += f"{date.strftime('%d %b %Y')} \n"
+        try:
+            msg += f"{exam.mode} \n"
+            msg += f"{exam.location} \n\n"
+        except:
+            msg += "\n"
     return msg
 
 
