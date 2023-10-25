@@ -1,7 +1,7 @@
 from controllers.db import get_profile
 import gen.amizone_pb2 as pb
 from util.stub import stubber
-from datetime import date, timedelta
+from datetime import date, timedelta,datetime
 from google.type import date_pb2 as _date_pb2
 import logging
 from . import db
@@ -36,7 +36,7 @@ async def get_user_profile(telegram_id: int):
         print(e.with_traceback(e.__traceback__))
         return None
     finally:
-        channel.close()
+        await channel.close()
 
 async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
     try:
@@ -60,7 +60,7 @@ async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
         return None
 
 
-async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.ScheduledClass | None:
+async def get_class_schedule(telegram_id: int, tomorrow = False,cal_date='') -> pb.ScheduledClass | None:
     profile = await get_profile(telegram_id)
     if profile is None:
         return None
@@ -69,6 +69,10 @@ async def get_class_schedule(telegram_id: int, tomorrow = False) -> pb.Scheduled
 
     if tomorrow:
         today = date.today() + timedelta(days=1)
+
+    elif len(cal_date) > 1:
+        today = datetime.strptime(cal_date, '%Y-%m-%d')
+
     else:
         today = date.today() 
 

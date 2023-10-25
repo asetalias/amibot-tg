@@ -10,8 +10,10 @@ from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
 from util import helpers
+import datetime
 
 logger = logging.getLogger()
+list_dates = [] #This is important for handling calendar
 
 BUTTON_MARKUP = [
     [
@@ -34,6 +36,9 @@ BUTTON_MARKUP = [
     [
         InlineKeyboardButton("Exam Schedule", callback_data="exam"),
         InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback"),
+    ],
+    [
+        InlineKeyboardButton("Calendar Schedule", callback_data="calendar"),
     ],
 ]
 
@@ -79,6 +84,25 @@ Please note that the same scores and comments will be used for all faculties wit
 """
 
 
+def create_calendar_markup():
+    today = datetime.date.today()
+    year = today.year
+    month = today.month
+    dates = []
+    global list_dates
+    list_dates = []
+
+    first_day = datetime.date(year, month, 1)
+    last_day = datetime.date(year, month + 1, 1) - datetime.timedelta(days=1)
+
+    for day in range(1, last_day.day + 1):
+        date = datetime.date(year, month, day)
+        dates.append(InlineKeyboardButton(str(day), callback_data=date.strftime("%Y-%m-%d")))
+        list_dates.append(date.strftime("%Y-%m-%d"))
+
+    return InlineKeyboardMarkup([dates[i:i + 7] for i in range(0, len(dates), 7)])   
+
+
 # Query Handlers
 async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "about" in update.callback_query.data:
@@ -99,7 +123,7 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await get_class_schedule_handler(update, context)
 
     if "tomorrow_schedule" in update.callback_query.data:
-        await get_class_schedule_handler(update, context, tomorrow=True)
+        await get_class_schedule_handler(update, context, tomorrow=True,cal_date='')
     
     if "exam" in update.callback_query.data:
         await get_exam_schedule_handler(update, context)
@@ -116,6 +140,17 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await update.callback_query.message.reply_text(
             WIFI_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
+
+    if "calendar" in update.callback_query.data:
+        await update.callback_query.message.reply_text(
+        'Select date', reply_markup=create_calendar_markup(),
+    )
+
+    if update.callback_query.data in list_dates:
+        await update.callback_query.message.reply_text(
+        f'Showing schedule for: {update.callback_query.data}')
+        await get_class_schedule_handler(
+        update, context, tomorrow=False,cal_date=update.callback_query.data)
 
 
 # Command Handlers
@@ -140,11 +175,11 @@ async def continue_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False):
+async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False,cal_date=''):
     user_id = update.effective_user.id
     try:
         await context.bot.send_message(chat_id=user_id, text="Fetching class schedule...")
-        response = await get_class_schedule(user_id, tomorrow = tomorrow)
+        response = await get_class_schedule(user_id, tomorrow = tomorrow,cal_date=cal_date)
         if response is None:
             # ! Need better exception handling
             logger.debug(msg="Error fetching class schedule")
