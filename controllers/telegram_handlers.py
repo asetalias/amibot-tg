@@ -143,12 +143,10 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
     if "calendar" in update.callback_query.data:
         await update.callback_query.message.reply_text(
-        'Select date', reply_markup=create_calendar_markup(),
+        'click on any of the date in calendar', reply_markup=create_calendar_markup(),
     )
 
     if update.callback_query.data in list_dates:
-        await update.callback_query.message.reply_text(
-        f'Showing schedule for: {update.callback_query.data}')
         await get_class_schedule_handler(
         update, context, tomorrow=False,cal_date=update.callback_query.data)
 
@@ -192,6 +190,9 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
             msg = "Enjoy your class-free day! 😄🎉"
         else:
             msg = get_class_schedule_formatter(response)
+            if len(cal_date) > 1:
+                msg = f'Showing schedule for: {(datetime.datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")} \n {msg}'
+
         
 
         await context.bot.send_message(
