@@ -173,7 +173,7 @@ async def continue_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False,cal_date=''):
+async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False, cal_date=''):
     user_id = update.effective_user.id
     try:
         await context.bot.send_message(chat_id=user_id, text="Fetching class schedule...")
