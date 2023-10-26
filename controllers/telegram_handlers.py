@@ -177,7 +177,7 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
     user_id = update.effective_user.id
     try:
         await context.bot.send_message(chat_id=user_id, text="Fetching class schedule...")
-        response = await get_class_schedule(user_id, tomorrow = tomorrow,cal_date=cal_date)
+        response = await get_class_schedule(user_id, tomorrow = tomorrow, cal_date=cal_date)
         if response is None:
             # ! Need better exception handling
             logger.debug(msg="Error fetching class schedule")
