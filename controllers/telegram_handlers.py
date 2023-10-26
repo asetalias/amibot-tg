@@ -123,7 +123,7 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await get_class_schedule_handler(update, context)
 
     if "tomorrow_schedule" in update.callback_query.data:
-        await get_class_schedule_handler(update, context, tomorrow=True,cal_date='')
+        await get_class_schedule_handler(update, context, tomorrow=True, cal_date='')
     
     if "exam" in update.callback_query.data:
         await get_exam_schedule_handler(update, context)
