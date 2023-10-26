@@ -191,9 +191,10 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
         else:
             msg = get_class_schedule_formatter(response)
             if len(cal_date) > 1:
-                msg = f'Showing schedule for: {(datetime.datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")} \n {msg}'
-
-        
+                lines = msg.split('\n')
+                del lines[1]
+                lines.insert(1,f'Showing schedule for: {(datetime.datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")}')
+                msg = '\n'.join(lines)
 
         await context.bot.send_message(
             chat_id=user_id, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), text=msg
