@@ -60,7 +60,7 @@ async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
         return None
 
 
-async def get_class_schedule(telegram_id: int, tomorrow = False,cal_date='') -> pb.ScheduledClass | None:
+async def get_class_schedule(telegram_id: int, tomorrow = False, cal_date='') -> pb.ScheduledClass | None:
     profile = await get_profile(telegram_id)
     if profile is None:
         return None
