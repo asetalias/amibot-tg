@@ -1,6 +1,7 @@
 from formatter.response_formatters import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
+import datetime
 from telegram.ext import (
     ContextTypes,
     ConversationHandler,
@@ -10,6 +11,7 @@ from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
 from util import helpers
+from util.calndr_markup import create_calendar_markup, get_shared_lst
 
 logger = logging.getLogger()
 
@@ -34,6 +36,9 @@ BUTTON_MARKUP = [
     [
         InlineKeyboardButton("Exam Schedule", callback_data="exam"),
         InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback"),
+    ],
+    [
+        InlineKeyboardButton("Calendar Schedule", callback_data="calendar"),
     ],
 ]
 
@@ -105,7 +110,7 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await get_class_schedule_handler(update, context)
 
     if "tomorrow_schedule" in update.callback_query.data:
-        await get_class_schedule_handler(update, context, tomorrow=True)
+        await get_class_schedule_handler(update, context, tomorrow=True, cal_date='')
     
     if "exam" in update.callback_query.data:
         await get_exam_schedule_handler(update, context)
@@ -122,6 +127,17 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await update.callback_query.message.reply_text(
             WIFI_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
+
+    if "calendar" in update.callback_query.data:
+        await update.callback_query.message.reply_text(
+        f'Get schedule for the month of *_{datetime.now().strftime("%B")}_*',
+        parse_mode=ParseMode.MARKDOWN_V2,
+        reply_markup=create_calendar_markup(datetime.now().month),
+        )
+
+    if update.callback_query.data in get_shared_lst():
+        await get_class_schedule_handler(
+        update, context, tomorrow=False,cal_date=update.callback_query.data)
 
 
 # Command Handlers
@@ -146,11 +162,11 @@ async def continue_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False):
+async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False, cal_date=''):
     user_id = update.effective_user.id
     try:
         await context.bot.send_message(chat_id=user_id, text="Fetching class schedule...")
-        response = await get_class_schedule(user_id, tomorrow = tomorrow)
+        response = await get_class_schedule(user_id, tomorrow = tomorrow, cal_date=cal_date)
         if response is None:
             # ! Need better exception handling
             logger.debug(msg="Error fetching class schedule")
@@ -163,7 +179,11 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
             msg = "Enjoy your class-free day! 😄🎉"
         else:
             msg = get_class_schedule_formatter(response)
-        
+            if len(cal_date) > 1:
+                lines = msg.split('\n')
+                del lines[1]
+                lines.insert(1,f'Showing schedule for: {(datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")}')
+                msg = '\n'.join(lines)
 
         await context.bot.send_message(
             chat_id=user_id, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), text=msg
