@@ -38,7 +38,7 @@ BUTTON_MARKUP = [
 ]
 
 ABOUT_MESSAGE = """\
-Let AmiBot is a telegram bot designed to take the frustration out of using Amizone.
+AmiBot is a telegram bot designed to take the frustration out of using Amizone.
 
 AmiBot is an open-source initiative, inviting users to contribute and improve its capabilities for all. Interested? Learn more by <a href='https://github.com/asetalias/amibot-tg'>Clicking here</a>
 
