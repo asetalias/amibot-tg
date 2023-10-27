@@ -37,7 +37,13 @@ BUTTON_MARKUP = [
     ],
 ]
 
-ABOUT_MESSAGE = "AmiBot is a Telegram bot that provides an easy way to access Amizone. \nIt is brought to you by ALIAS."
+ABOUT_MESSAGE = """\
+Let AmiBot is a telegram bot designed to take the frustration out of using Amizone.
+
+AmiBot is an open-source initiative, inviting users to contribute and improve its capabilities for all. Interested? Learn more by <a href='https://github.com/asetalias/amibot-tg'>Clicking here</a>
+
+Made with ❤️ by <a href='https://asetalias.in/'>ALiAS</a>
+"""
 
 WIFI_MESSAGE = """Register for wifi: add as many devices as you want!
 
