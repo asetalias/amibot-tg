@@ -13,7 +13,6 @@ Amibot-tg is a chat bot that provides a faster and more reliable alternative to 
 ## Table of contents
 
 - [Amibot-tg](#amibot-tg)
-  - [Table of contents](#table-of-contents)
   - [Features](#features)
   - [Screenshots](#screenshots)
   - [What Makes Amibot-tg Different?](#what-makes-amibot-tg-different)
