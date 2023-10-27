@@ -400,6 +400,11 @@ async def get_faculty_feedback(
 
         comment = " ".join(user_response_args[2:])
 
+        await context.bot.send_message(
+                chat_id=user_id,
+                text="Filling faculty feedback...",
+            )
+
         response = await fill_faculty_feedback(user_id, rating, query_rating, comment)
         if response is None:
             await context.bot.send_message(
