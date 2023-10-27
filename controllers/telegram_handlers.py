@@ -1,6 +1,7 @@
 from formatter.response_formatters import *
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
+import datetime
 from telegram.ext import (
     ContextTypes,
     ConversationHandler,
@@ -10,10 +11,9 @@ from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
 from util import helpers
-import datetime
+from util.calndr_markup import create_calendar_markup, get_shared_lst
 
 logger = logging.getLogger()
-list_dates = [] #This is important for handling calendar
 
 BUTTON_MARKUP = [
     [
@@ -84,25 +84,6 @@ Please note that the same scores and comments will be used for all faculties wit
 """
 
 
-def create_calendar_markup():
-    today = datetime.date.today()
-    year = today.year
-    month = today.month
-    dates = []
-    global list_dates
-    list_dates = []
-
-    first_day = datetime.date(year, month, 1)
-    last_day = datetime.date(year, month + 1, 1) - datetime.timedelta(days=1)
-
-    for day in range(1, last_day.day + 1):
-        date = datetime.date(year, month, day)
-        dates.append(InlineKeyboardButton(str(day), callback_data=date.strftime("%Y-%m-%d")))
-        list_dates.append(date.strftime("%Y-%m-%d"))
-
-    return InlineKeyboardMarkup([dates[i:i + 7] for i in range(0, len(dates), 7)])   
-
-
 # Query Handlers
 async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "about" in update.callback_query.data:
@@ -143,10 +124,12 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
     if "calendar" in update.callback_query.data:
         await update.callback_query.message.reply_text(
-        'click on any of the date in calendar', reply_markup=create_calendar_markup(),
-    )
+        f'Get schedule for the month of *_{datetime.now().strftime("%B")}_*',
+        parse_mode=ParseMode.MARKDOWN_V2,
+        reply_markup=create_calendar_markup(datetime.now().month),
+        )
 
-    if update.callback_query.data in list_dates:
+    if update.callback_query.data in get_shared_lst():
         await get_class_schedule_handler(
         update, context, tomorrow=False,cal_date=update.callback_query.data)
 
@@ -193,7 +176,7 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
             if len(cal_date) > 1:
                 lines = msg.split('\n')
                 del lines[1]
-                lines.insert(1,f'Showing schedule for: {(datetime.datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")}')
+                lines.insert(1,f'Showing schedule for: {(datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")}')
                 msg = '\n'.join(lines)
 
         await context.bot.send_message(
