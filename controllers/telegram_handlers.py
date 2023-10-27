@@ -428,6 +428,7 @@ async def get_faculty_feedback(
             chat_id=user_id,
             text="Invalid format or values. Please enter your response in the format: {rating} {query rating} {comment} where rating is an integer between 1 and 5, and query rating is an integer between 1 and 3.\nType cancel to abort the operation.",
         )
+        return GET_FACULTY_FEEDBACK
     except Exception as e:
         print(e)
         await context.bot.send_message(
@@ -533,6 +534,7 @@ async def register_wifi_handler(
             chat_id=user_id,
             text="Invalid format or values. Please enter your response in the format: {address} {override} where address is the MAC address of the device you wish to add and override is True/Flase.\nType cancel to abort the operation.",
         )
+        return REGISTER_WIFI
     except Exception as e:
         print(e)
         await context.bot.send_message(
