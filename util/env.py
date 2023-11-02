@@ -11,3 +11,4 @@ SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 URL = "amizone.fly.dev:443"
 MONGO_COLLECTION = "profile"
 DEV_MODE = os.environ.get("DEV_MODE", False)
+TEST_TOKEN = os.environ.get("TEST_TOKEN", "")

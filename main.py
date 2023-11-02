@@ -6,7 +6,7 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
-from util.env import TOKEN, SENTRY_DSN, DEV_MODE
+from util.env import TOKEN, SENTRY_DSN, DEV_MODE, TEST_TOKEN
 from controllers.telegram_handlers import *
 from controllers.db import get_profile_via_token
 import logging
@@ -28,10 +28,13 @@ def main():
             dsn=SENTRY_DSN,
             traces_sample_rate=1.0,
         )
-
+    
+    # Set token according to dev mode
+    curr_token = TEST_TOKEN if DEV_MODE else TOKEN
+    
 
     logger.info("Starting bot...")
-    app = Application.builder().token(TOKEN).build()
+    app = Application.builder().token(curr_token).build()
 
     # Commands
     app.add_handler(CommandHandler("start", start_command))
