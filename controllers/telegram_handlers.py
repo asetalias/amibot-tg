@@ -94,7 +94,7 @@ Please note that the same scores and comments will be used for all faculties wit
 async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "about" in update.callback_query.data:
         await update.callback_query.message.reply_text(
-            ABOUT_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+            ABOUT_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), parse_mode=ParseMode.HTML
         )
 
     if "wearos" in update.callback_query.data:
