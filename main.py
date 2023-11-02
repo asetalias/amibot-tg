@@ -13,14 +13,14 @@ import logging
 import sentry_sdk
 
 def main():
-        
+    
     logger = logging.getLogger()
 
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
     )
-    
+
     # Sentry, skip for dev mode
     if not DEV_MODE and not SENTRY_DSN == "":
         logger.info("Starting sentry...")
@@ -28,10 +28,14 @@ def main():
             dsn=SENTRY_DSN,
             traces_sample_rate=1.0,
         )
-    
+
     # Set token according to dev mode
-    curr_token = TEST_TOKEN if DEV_MODE else TOKEN
-    
+    if DEV_MODE:
+        logger.info("Running in dev mode...")
+        curr_token = TEST_TOKEN
+    else:
+        logger.info("Running in prod mode...")
+        curr_token = TOKEN
 
     logger.info("Starting bot...")
     app = Application.builder().token(curr_token).build()
