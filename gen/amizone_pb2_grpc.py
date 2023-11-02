@@ -45,6 +45,16 @@ class AmizoneServiceStub(object):
                 request_serializer=amizone__pb2.EmptyMessage.SerializeToString,
                 response_deserializer=amizone__pb2.Courses.FromString,
                 )
+        self.GetExamResult = channel.unary_unary(
+                '/go_amizone.server.proto.v1.AmizoneService/GetExamResult',
+                request_serializer=amizone__pb2.SemesterRef.SerializeToString,
+                response_deserializer=amizone__pb2.ExamResultRecords.FromString,
+                )
+        self.GetCurrentExamResult = channel.unary_unary(
+                '/go_amizone.server.proto.v1.AmizoneService/GetCurrentExamResult',
+                request_serializer=amizone__pb2.EmptyMessage.SerializeToString,
+                response_deserializer=amizone__pb2.ExamResultRecords.FromString,
+                )
         self.GetUserProfile = channel.unary_unary(
                 '/go_amizone.server.proto.v1.AmizoneService/GetUserProfile',
                 request_serializer=amizone__pb2.EmptyMessage.SerializeToString,
@@ -118,6 +128,20 @@ class AmizoneServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetExamResult(self, request, context):
+        """GetExamResult returns the exam result for the given semester.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetCurrentExamResult(self, request, context):
+        """GetCurrentExamResult returns the exam result for the "current" semester.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def GetUserProfile(self, request, context):
         """GetUserProfile returns the user's profile.
         """
@@ -181,6 +205,16 @@ def add_AmizoneServiceServicer_to_server(servicer, server):
                     servicer.GetCurrentCourses,
                     request_deserializer=amizone__pb2.EmptyMessage.FromString,
                     response_serializer=amizone__pb2.Courses.SerializeToString,
+            ),
+            'GetExamResult': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetExamResult,
+                    request_deserializer=amizone__pb2.SemesterRef.FromString,
+                    response_serializer=amizone__pb2.ExamResultRecords.SerializeToString,
+            ),
+            'GetCurrentExamResult': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetCurrentExamResult,
+                    request_deserializer=amizone__pb2.EmptyMessage.FromString,
+                    response_serializer=amizone__pb2.ExamResultRecords.SerializeToString,
             ),
             'GetUserProfile': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUserProfile,
@@ -317,6 +351,40 @@ class AmizoneService(object):
         return grpc.experimental.unary_unary(request, target, '/go_amizone.server.proto.v1.AmizoneService/GetCurrentCourses',
             amizone__pb2.EmptyMessage.SerializeToString,
             amizone__pb2.Courses.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetExamResult(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/go_amizone.server.proto.v1.AmizoneService/GetExamResult',
+            amizone__pb2.SemesterRef.SerializeToString,
+            amizone__pb2.ExamResultRecords.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetCurrentExamResult(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/go_amizone.server.proto.v1.AmizoneService/GetCurrentExamResult',
+            amizone__pb2.EmptyMessage.SerializeToString,
+            amizone__pb2.ExamResultRecords.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
