@@ -34,6 +34,7 @@ def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
         msg += f"{exam.course.code} \n"
         msg += f"{exam.course.name} \n"
         msg += f"{date.strftime('%d %b %Y')} \n"
+        msg += f"{date.strftime('%H:%M')} \n"
         try:
             msg += f"{exam.mode} \n"
             msg += f"{exam.location} \n\n"
@@ -56,7 +57,6 @@ def get_courses_formatter(response: pb.Courses) -> str:
 
 def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
     logger.info("Formatting")
-    
     attendance_indicators = ''
     msg = "Class Schedule: \n\n"
 
