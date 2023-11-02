@@ -23,7 +23,6 @@ BUTTON_MARKUP = [
     [
         InlineKeyboardButton("Attendance", callback_data="attendance"),
         InlineKeyboardButton("Class Schedule", callback_data="class_schedule"),
-        
     ],
     [
         InlineKeyboardButton("Current Course", callback_data="current_course"),
@@ -94,7 +93,10 @@ Please note that the same scores and comments will be used for all faculties wit
 async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "about" in update.callback_query.data:
         await update.callback_query.message.reply_text(
-            ABOUT_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+            ABOUT_MESSAGE,
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
         )
 
     if "wearos" in update.callback_query.data:
@@ -110,8 +112,8 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await get_class_schedule_handler(update, context)
 
     if "tomorrow_schedule" in update.callback_query.data:
-        await get_class_schedule_handler(update, context, tomorrow=True, cal_date='')
-    
+        await get_class_schedule_handler(update, context, tomorrow=True, cal_date="")
+
     if "exam" in update.callback_query.data:
         await get_exam_schedule_handler(update, context)
 
@@ -130,14 +132,15 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
     if "calendar" in update.callback_query.data:
         await update.callback_query.message.reply_text(
-        f'Get schedule for the month of *_{datetime.now().strftime("%B")}_*',
-        parse_mode=ParseMode.MARKDOWN_V2,
-        reply_markup=create_calendar_markup(datetime.now().month),
+            f'Get schedule for the month of *_{datetime.now().strftime("%B")}_*',
+            parse_mode=ParseMode.MARKDOWN_V2,
+            reply_markup=create_calendar_markup(datetime.now().month),
         )
 
     if update.callback_query.data in get_shared_lst():
         await get_class_schedule_handler(
-        update, context, tomorrow=False,cal_date=update.callback_query.data)
+            update, context, tomorrow=False, cal_date=update.callback_query.data
+        )
 
 
 # Command Handlers
@@ -162,11 +165,17 @@ async def continue_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow = False, cal_date=''):
+async def get_class_schedule_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, tomorrow=False, cal_date=""
+):
     user_id = update.effective_user.id
     try:
-        await context.bot.send_message(chat_id=user_id, text="Fetching class schedule...")
-        response = await get_class_schedule(user_id, tomorrow = tomorrow, cal_date=cal_date)
+        await context.bot.send_message(
+            chat_id=user_id, text="Fetching class schedule..."
+        )
+        response = await get_class_schedule(
+            user_id, tomorrow=tomorrow, cal_date=cal_date
+        )
         if response is None:
             # ! Need better exception handling
             logger.debug(msg="Error fetching class schedule")
@@ -180,10 +189,13 @@ async def get_class_schedule_handler(update: Update, context: ContextTypes.DEFAU
         else:
             msg = get_class_schedule_formatter(response)
             if len(cal_date) > 1:
-                lines = msg.split('\n')
+                lines = msg.split("\n")
                 del lines[1]
-                lines.insert(1,f'Showing schedule for: {(datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")}')
-                msg = '\n'.join(lines)
+                lines.insert(
+                    1,
+                    f'Showing schedule for: {(datetime.strptime(cal_date, "%Y-%m-%d")).strftime("%a, %d %b")}',
+                )
+                msg = "\n".join(lines)
 
         await context.bot.send_message(
             chat_id=user_id, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP), text=msg
@@ -221,6 +233,7 @@ async def get_current_course_handler(
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             text=msg,
             parse_mode="HTML",
+            disable_web_page_preview=True,
         )
     except Exception as e:
         print(e)
@@ -234,7 +247,7 @@ async def get_current_course_handler(
 async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     input_text = update.message.text
     input_args = input_text.split(" ")
-        
+
     if len(input_args) != 3:
         await update.message.reply_text(
             "Invalid login command. \nUse the command like -> /login 837283 password."
@@ -271,8 +284,9 @@ async def login_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "There was an error logging in. Please try again later."
         )
-        
+
     await update.message.delete()
+
 
 async def wearos_token_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -288,16 +302,15 @@ async def wearos_token_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
         for i in range(3):
             token = helpers.get_random()
-            
+
             val = await checkToken(profile["_id"], token)
-            
+
             if val:
                 await context.bot.send_message(
                     chat_id=user_id,
                     text=f"Your token is {token}. Please enter this token in the WearOS app.",
                 )
                 return
-
 
         await context.bot.send_message(
             chat_id=user_id,
@@ -311,7 +324,6 @@ async def wearos_token_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             text="There was an error fetching your profile. Please try again later.",
         )
         return
-        
 
 
 async def get_attendance_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -352,8 +364,8 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
 
         if response == "not_logged_in":
             await context.bot.send_message(
-            chat_id=user_id,
-            text="You are not logged in. Use /login {amizone_id} {password} to login.",
+                chat_id=user_id,
+                text="You are not logged in. Use /login {amizone_id} {password} to login.",
             )
             return
         elif response is None:
@@ -368,11 +380,13 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
             msg = get_exam_formatter(response)
 
             await context.bot.send_message(
-                chat_id=user_id, text=msg, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
+                chat_id=user_id,
+                text=msg,
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             )
     except Exception as e:
         print(e)
-        
+
         await context.bot.send_message(
             chat_id=user_id,
             text="There was an error fetching exam schedule. Please try again later.",
@@ -427,9 +441,9 @@ async def get_faculty_feedback(
         comment = " ".join(user_response_args[2:])
 
         await context.bot.send_message(
-                chat_id=user_id,
-                text="Filling faculty feedback...",
-            )
+            chat_id=user_id,
+            text="Filling faculty feedback...",
+        )
 
         response = await fill_faculty_feedback(user_id, rating, query_rating, comment)
         if response is None:
@@ -504,7 +518,10 @@ async def register_wifi_entry(
 ) -> int:
     user_id = update.effective_user.id
     await context.bot.send_message(
-        chat_id=user_id, text=WIFI_INSTRUCTIONS, parse_mode=ParseMode.HTML
+        chat_id=user_id,
+        text=WIFI_INSTRUCTIONS,
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True,
     )
     logger.info("Sent WiFi registration instructions")
     return REGISTER_WIFI
