@@ -16,6 +16,12 @@ docker:
 dockerRun:
 	docker run -d --name py-amibot -p 3333:3333 py-amibot
 
+lint:
+	poetry run ruff check **/*.py
+
+format:
+	poetry run ruff format **/*.py
+
 .PHONY: gen, mongo, dev, env, docker, dockerRun
 
 

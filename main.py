@@ -13,9 +13,11 @@ from controllers.db import get_profile_via_token
 
 import sentry_sdk
 
+
 def main():
-    
+ 
     logger = AmibotLogger("AmiBot")
+
 
     # Sentry, skip for dev mode
     if not DEV_MODE and not SENTRY_DSN == "":
@@ -76,4 +78,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -38,6 +38,7 @@ async def get_user_profile(telegram_id: int):
     finally:
         await channel.close()
 
+
 async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
     try:
         logger.info("Getting schedule")
@@ -49,18 +50,20 @@ async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
 
         logger.info("Getting class schedule via grpc")
         response = await stub.GetClassSchedule(
-            pb.ClassScheduleRequest(date=val), 
+            pb.ClassScheduleRequest(date=val),
             metadata=metadata,
         )
 
         return response
-        
+
     except Exception as e:
         logger.error(e)
         return None
 
 
-async def get_class_schedule(telegram_id: int, tomorrow = False, cal_date='') -> pb.ScheduledClass | None:
+async def get_class_schedule(
+    telegram_id: int, tomorrow=False, cal_date=""
+) -> pb.ScheduledClass | None:
     profile = await get_profile(telegram_id)
     if profile is None:
         return None
@@ -71,10 +74,10 @@ async def get_class_schedule(telegram_id: int, tomorrow = False, cal_date='') ->
         today = date.today() + timedelta(days=1)
 
     elif len(cal_date) > 1:
-        today = datetime.strptime(cal_date, '%Y-%m-%d')
+        today = datetime.strptime(cal_date, "%Y-%m-%d")
 
     else:
-        today = date.today() 
+        today = date.today()
 
     val = _date_pb2.Date(year=today.year, month=today.month, day=today.day)
 
