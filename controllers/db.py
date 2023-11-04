@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger()
 
+
 async def checkToken(telegram_id: int, token: int) -> bool:
     try:
         logger.info("Checking token")
@@ -20,6 +21,7 @@ async def checkToken(telegram_id: int, token: int) -> bool:
         print(e)
         return False
 
+
 async def setToken(telegram_id: int, token: int) -> bool:
     try:
         filter = {"_id": telegram_id}
@@ -29,6 +31,7 @@ async def setToken(telegram_id: int, token: int) -> bool:
     except Exception as e:
         logger.error(e)
         return False
+
 
 async def create_profile(telegram_id: int, username, password) -> str:
     data = await profile.find_one({"_id": telegram_id})
@@ -45,6 +48,7 @@ async def create_profile(telegram_id: int, username, password) -> str:
         return "Profile created successfully"
     except Exception as e:
         return str(e)
+
 
 async def get_profile_via_token(token: int) -> dict | None:
     try:

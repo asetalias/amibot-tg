@@ -12,8 +12,8 @@ from controllers.db import get_profile_via_token
 import logging
 import sentry_sdk
 
+
 def main():
-    
     logger = logging.getLogger()
 
     logging.basicConfig(
@@ -80,4 +80,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
