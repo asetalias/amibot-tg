@@ -5,7 +5,7 @@ mongo:
 	docker run -d --name py-mongo -p 27017:27017 mongo  
 
 dev:
-	poetry run nodemon --exec python main.py
+	poetry run nodemon --no-colors --exec python main.py
 
 env:
 	poetry shell
