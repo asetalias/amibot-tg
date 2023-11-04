@@ -11,7 +11,6 @@ from controllers.rpc_calls import *
 import logging
 from util.env import TOKEN
 from util import helpers
-from util.calndr_markup import create_calendar_markup, get_shared_lst
 
 logger = logging.getLogger()
 
@@ -134,10 +133,10 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         await update.callback_query.message.reply_text(
             f'Get schedule for the month of *_{datetime.now().strftime("%B")}_*',
             parse_mode=ParseMode.MARKDOWN_V2,
-            reply_markup=create_calendar_markup(datetime.now().month),
+            reply_markup=helpers.create_calendar_markup(datetime.now().month),
         )
 
-    if update.callback_query.data in get_shared_lst():
+    if update.callback_query.data in helpers.get_shared_lst():
         await get_class_schedule_handler(
             update, context, tomorrow=False, cal_date=update.callback_query.data
         )
