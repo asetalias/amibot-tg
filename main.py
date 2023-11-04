@@ -7,19 +7,17 @@ from telegram.ext import (
     filters,
 )
 from util.env import TOKEN, SENTRY_DSN, DEV_MODE, TEST_TOKEN
+from util.logger import AmibotLogger
 from controllers.telegram_handlers import *
 from controllers.db import get_profile_via_token
-import logging
+
 import sentry_sdk
 
 
 def main():
-    logger = logging.getLogger()
+ 
+    logger = AmibotLogger("AmiBot")
 
-    logging.basicConfig(
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO,
-    )
 
     # Sentry, skip for dev mode
     if not DEV_MODE and not SENTRY_DSN == "":
@@ -30,11 +28,11 @@ def main():
         )
 
     # Set token according to dev mode
-    if DEV_MODE:
-        logger.info("Running in dev mode...")
+    if DEV_MODE == "True":
+        logger.debug("Running in dev mode...")
         curr_token = TEST_TOKEN
     else:
-        logger.info("Running in prod mode...")
+        logger.debug("Running in prod mode...")
         curr_token = TOKEN
 
     logger.info("Starting bot...")
