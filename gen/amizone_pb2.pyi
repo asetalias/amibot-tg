@@ -63,6 +63,56 @@ class Marks(_message.Message):
     max: float
     def __init__(self, have: _Optional[float] = ..., max: _Optional[float] = ...) -> None: ...
 
+class ExamResultRecord(_message.Message):
+    __slots__ = ["course", "score", "credits", "publish_date"]
+    COURSE_FIELD_NUMBER: _ClassVar[int]
+    SCORE_FIELD_NUMBER: _ClassVar[int]
+    CREDITS_FIELD_NUMBER: _ClassVar[int]
+    PUBLISH_DATE_FIELD_NUMBER: _ClassVar[int]
+    course: CourseRef
+    score: Score
+    credits: Credits
+    publish_date: _date_pb2.Date
+    def __init__(self, course: _Optional[_Union[CourseRef, _Mapping]] = ..., score: _Optional[_Union[Score, _Mapping]] = ..., credits: _Optional[_Union[Credits, _Mapping]] = ..., publish_date: _Optional[_Union[_date_pb2.Date, _Mapping]] = ...) -> None: ...
+
+class Score(_message.Message):
+    __slots__ = ["max", "grade", "grade_point"]
+    MAX_FIELD_NUMBER: _ClassVar[int]
+    GRADE_FIELD_NUMBER: _ClassVar[int]
+    GRADE_POINT_FIELD_NUMBER: _ClassVar[int]
+    max: int
+    grade: str
+    grade_point: int
+    def __init__(self, max: _Optional[int] = ..., grade: _Optional[str] = ..., grade_point: _Optional[int] = ...) -> None: ...
+
+class Credits(_message.Message):
+    __slots__ = ["acquired", "effective", "points"]
+    ACQUIRED_FIELD_NUMBER: _ClassVar[int]
+    EFFECTIVE_FIELD_NUMBER: _ClassVar[int]
+    POINTS_FIELD_NUMBER: _ClassVar[int]
+    acquired: int
+    effective: int
+    points: int
+    def __init__(self, acquired: _Optional[int] = ..., effective: _Optional[int] = ..., points: _Optional[int] = ...) -> None: ...
+
+class OverallResult(_message.Message):
+    __slots__ = ["semester", "semester_grade_point_average", "cumulative_grade_point_average"]
+    SEMESTER_FIELD_NUMBER: _ClassVar[int]
+    SEMESTER_GRADE_POINT_AVERAGE_FIELD_NUMBER: _ClassVar[int]
+    CUMULATIVE_GRADE_POINT_AVERAGE_FIELD_NUMBER: _ClassVar[int]
+    semester: SemesterRef
+    semester_grade_point_average: float
+    cumulative_grade_point_average: float
+    def __init__(self, semester: _Optional[_Union[SemesterRef, _Mapping]] = ..., semester_grade_point_average: _Optional[float] = ..., cumulative_grade_point_average: _Optional[float] = ...) -> None: ...
+
+class ExamResultRecords(_message.Message):
+    __slots__ = ["course_wise", "overall"]
+    COURSE_WISE_FIELD_NUMBER: _ClassVar[int]
+    OVERALL_FIELD_NUMBER: _ClassVar[int]
+    course_wise: _containers.RepeatedCompositeFieldContainer[ExamResultRecord]
+    overall: _containers.RepeatedCompositeFieldContainer[OverallResult]
+    def __init__(self, course_wise: _Optional[_Iterable[_Union[ExamResultRecord, _Mapping]]] = ..., overall: _Optional[_Iterable[_Union[OverallResult, _Mapping]]] = ...) -> None: ...
+
 class Course(_message.Message):
     __slots__ = ["ref", "type", "attendance", "internal_marks", "syllabus_doc"]
     REF_FIELD_NUMBER: _ClassVar[int]
@@ -138,14 +188,16 @@ class AmizoneDiaryEvent(_message.Message):
     def __init__(self, type: _Optional[str] = ..., course_code: _Optional[str] = ..., course_name: _Optional[str] = ..., faculty: _Optional[str] = ..., room: _Optional[str] = ..., start: _Optional[str] = ..., end: _Optional[str] = ...) -> None: ...
 
 class ScheduledExam(_message.Message):
-    __slots__ = ["course", "time", "mode"]
+    __slots__ = ["course", "time", "mode", "location"]
     COURSE_FIELD_NUMBER: _ClassVar[int]
     TIME_FIELD_NUMBER: _ClassVar[int]
     MODE_FIELD_NUMBER: _ClassVar[int]
+    LOCATION_FIELD_NUMBER: _ClassVar[int]
     course: CourseRef
     time: _timestamp_pb2.Timestamp
     mode: str
-    def __init__(self, course: _Optional[_Union[CourseRef, _Mapping]] = ..., time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., mode: _Optional[str] = ...) -> None: ...
+    location: str
+    def __init__(self, course: _Optional[_Union[CourseRef, _Mapping]] = ..., time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., mode: _Optional[str] = ..., location: _Optional[str] = ...) -> None: ...
 
 class ExaminationSchedule(_message.Message):
     __slots__ = ["title", "exams"]
