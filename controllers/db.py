@@ -34,14 +34,14 @@ async def setToken(telegram_id: int, token: int) -> bool:
 
 
 async def create_profile(telegram_id: int, username, password) -> str:
+    encrypted_username, encrypted_password = encrypt(username, password)
+
     data = await profile.find_one({"_id": telegram_id})
-    if data != None:
-        encrypted_password = encrypt(password)
-        resp = await update_profile(telegram_id, username, encrypted_password)
+    if data != None:        
+        resp = await update_profile(telegram_id, encrypted_username, encrypted_password)
         return resp
 
-    encrypted_password = encrypt(password)
-    data = {"_id": telegram_id, "username": username, "password": encrypted_password}
+    data = {"_id": telegram_id, "username": encrypted_username, "password": encrypted_password}
 
     try:
         await profile.insert_one(data)
@@ -54,7 +54,7 @@ async def get_profile_via_token(token: int) -> dict | None:
     try:
         logger.info("Getting profile")
         data = await profile.find_one({"token": token})
-        data["password"] = decrypt(data["password"])
+        data["username"], data["password"] = decrypt(data["username"], data["password"])
         return data
     except Exception as e:
         print(e)
@@ -65,7 +65,8 @@ async def get_profile(telegram_id: int) -> dict:
     try:
         logger.info("Getting profile")
         data = await profile.find_one({"_id": telegram_id})
-        data["password"] = decrypt(data["password"])
+        data["username"], data["password"] = decrypt(data["username"], data["password"])
+        print(data)
         return data
     except Exception as e:
         logger.error(e)
@@ -74,8 +75,9 @@ async def get_profile(telegram_id: int) -> dict:
 
 async def update_profile(telegram_id: int, username, password) -> str:
     try:
+        encrypted_username, encrypted_password = encrypt(username, password)
         filter = {"_id": telegram_id}
-        update = {"$set": {"username": username, "password": password}}
+        update = {"$set": {"username": encrypted_username, "password": encrypted_password}}
         await profile.update_one(filter, update)
         return "Profile updated successfully"
     except Exception as e:

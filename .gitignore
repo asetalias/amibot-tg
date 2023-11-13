@@ -169,3 +169,6 @@ Dockerfile
 app.env
 fly.toml
 dev.env
+test.py
+zzz.ipynb
+*.csv
