@@ -1,13 +1,13 @@
 package api
 
 import (
+	"amibot-tg/server/utils"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/ditsuke/go-amizone/amizone"
 	"github.com/ditsuke/go-amizone/amizone/models"
-	"github.com/fernet/fernet-go"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -76,7 +76,8 @@ func (s *Server) classScheduleHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	user.Password = string(fernet.VerifyAndDecrypt([]byte(user.Password), 0, s.config.FernetKey))
+	user.Username = string(utils.Decrypt(user.Username, s.config.FernetKey))
+	user.Password = string(utils.Decrypt(user.Password, s.config.FernetKey))
 
 	creds := amizone.Credentials{
 		Username: user.Username,
