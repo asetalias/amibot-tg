@@ -54,6 +54,7 @@ type classScheduleRes struct {
 	Time       string                 `json:"time"`
 	Faculty    string                 `json:"faculty"`
 	Attendance models.AttendanceState `json:"attendance"`
+	Room       string                 `json:"room"`
 }
 
 func (s *Server) classScheduleHandler(c *gin.Context) {
@@ -113,6 +114,7 @@ func (s *Server) classScheduleHandler(c *gin.Context) {
 			Time:       startTime + " : " + endTime,
 			Faculty:    class.Faculty,
 			Attendance: class.Attended,
+			Room: 	 class.Room,
 		}
 
 		res = append(res, classItem)
