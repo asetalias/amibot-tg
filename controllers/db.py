@@ -34,13 +34,12 @@ async def setToken(telegram_id: int, token: int) -> bool:
 
 
 async def create_profile(telegram_id: int, username, password) -> str:
-    encrypted_username, encrypted_password = encrypt(username, password)
-
     data = await profile.find_one({"_id": telegram_id})
     if data != None:        
-        resp = await update_profile(telegram_id, encrypted_username, encrypted_password)
+        resp = await update_profile(telegram_id, username, password)
         return resp
 
+    encrypted_username, encrypted_password = encrypt(username, password)
     data = {"_id": telegram_id, "username": encrypted_username, "password": encrypted_password}
 
     try:
@@ -66,7 +65,6 @@ async def get_profile(telegram_id: int) -> dict:
         logger.info("Getting profile")
         data = await profile.find_one({"_id": telegram_id})
         data["username"], data["password"] = decrypt(data["username"], data["password"])
-        print(data)
         return data
     except Exception as e:
         logger.error(e)
