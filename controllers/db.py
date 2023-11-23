@@ -35,12 +35,16 @@ async def setToken(telegram_id: int, token: int) -> bool:
 
 async def create_profile(telegram_id: int, username, password) -> str:
     data = await profile.find_one({"_id": telegram_id})
-    if data != None:        
+    if data != None:
         resp = await update_profile(telegram_id, username, password)
         return resp
 
     encrypted_username, encrypted_password = encrypt(username, password)
-    data = {"_id": telegram_id, "username": encrypted_username, "password": encrypted_password}
+    data = {
+        "_id": telegram_id,
+        "username": encrypted_username,
+        "password": encrypted_password,
+    }
 
     try:
         await profile.insert_one(data)
@@ -75,7 +79,9 @@ async def update_profile(telegram_id: int, username, password) -> str:
     try:
         encrypted_username, encrypted_password = encrypt(username, password)
         filter = {"_id": telegram_id}
-        update = {"$set": {"username": encrypted_username, "password": encrypted_password}}
+        update = {
+            "$set": {"username": encrypted_username, "password": encrypted_password}
+        }
         await profile.update_one(filter, update)
         return "Profile updated successfully"
     except Exception as e:

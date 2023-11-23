@@ -15,9 +15,7 @@ import sentry_sdk
 
 
 def main():
- 
     logger = AmibotLogger("AmiBot")
-
 
     # Sentry, skip for dev mode
     if not DEV_MODE and not SENTRY_DSN == "":

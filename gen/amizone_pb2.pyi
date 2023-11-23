@@ -6,7 +6,13 @@ from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
+from typing import (
+    ClassVar as _ClassVar,
+    Iterable as _Iterable,
+    Mapping as _Mapping,
+    Optional as _Optional,
+    Union as _Union,
+)
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -17,6 +23,7 @@ class AttendanceState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     ABSENT: _ClassVar[AttendanceState]
     NA: _ClassVar[AttendanceState]
     INVALID: _ClassVar[AttendanceState]
+
 PENDING: AttendanceState
 PRESENT: AttendanceState
 ABSENT: AttendanceState
@@ -31,7 +38,9 @@ class ClassScheduleRequest(_message.Message):
     __slots__ = ["date"]
     DATE_FIELD_NUMBER: _ClassVar[int]
     date: _date_pb2.Date
-    def __init__(self, date: _Optional[_Union[_date_pb2.Date, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self, date: _Optional[_Union[_date_pb2.Date, _Mapping]] = ...
+    ) -> None: ...
 
 class CourseRef(_message.Message):
     __slots__ = ["code", "name"]
@@ -39,7 +48,9 @@ class CourseRef(_message.Message):
     NAME_FIELD_NUMBER: _ClassVar[int]
     code: str
     name: str
-    def __init__(self, code: _Optional[str] = ..., name: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, code: _Optional[str] = ..., name: _Optional[str] = ...
+    ) -> None: ...
 
 class SemesterRef(_message.Message):
     __slots__ = ["semester_ref"]
@@ -53,7 +64,9 @@ class Attendance(_message.Message):
     HELD_FIELD_NUMBER: _ClassVar[int]
     attended: int
     held: int
-    def __init__(self, attended: _Optional[int] = ..., held: _Optional[int] = ...) -> None: ...
+    def __init__(
+        self, attended: _Optional[int] = ..., held: _Optional[int] = ...
+    ) -> None: ...
 
 class Marks(_message.Message):
     __slots__ = ["have", "max"]
@@ -61,7 +74,9 @@ class Marks(_message.Message):
     MAX_FIELD_NUMBER: _ClassVar[int]
     have: float
     max: float
-    def __init__(self, have: _Optional[float] = ..., max: _Optional[float] = ...) -> None: ...
+    def __init__(
+        self, have: _Optional[float] = ..., max: _Optional[float] = ...
+    ) -> None: ...
 
 class ExamResultRecord(_message.Message):
     __slots__ = ["course", "score", "credits", "publish_date"]
@@ -73,7 +88,13 @@ class ExamResultRecord(_message.Message):
     score: Score
     credits: Credits
     publish_date: _date_pb2.Date
-    def __init__(self, course: _Optional[_Union[CourseRef, _Mapping]] = ..., score: _Optional[_Union[Score, _Mapping]] = ..., credits: _Optional[_Union[Credits, _Mapping]] = ..., publish_date: _Optional[_Union[_date_pb2.Date, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self,
+        course: _Optional[_Union[CourseRef, _Mapping]] = ...,
+        score: _Optional[_Union[Score, _Mapping]] = ...,
+        credits: _Optional[_Union[Credits, _Mapping]] = ...,
+        publish_date: _Optional[_Union[_date_pb2.Date, _Mapping]] = ...,
+    ) -> None: ...
 
 class Score(_message.Message):
     __slots__ = ["max", "grade", "grade_point"]
@@ -83,7 +104,12 @@ class Score(_message.Message):
     max: int
     grade: str
     grade_point: int
-    def __init__(self, max: _Optional[int] = ..., grade: _Optional[str] = ..., grade_point: _Optional[int] = ...) -> None: ...
+    def __init__(
+        self,
+        max: _Optional[int] = ...,
+        grade: _Optional[str] = ...,
+        grade_point: _Optional[int] = ...,
+    ) -> None: ...
 
 class Credits(_message.Message):
     __slots__ = ["acquired", "effective", "points"]
@@ -93,17 +119,31 @@ class Credits(_message.Message):
     acquired: int
     effective: int
     points: int
-    def __init__(self, acquired: _Optional[int] = ..., effective: _Optional[int] = ..., points: _Optional[int] = ...) -> None: ...
+    def __init__(
+        self,
+        acquired: _Optional[int] = ...,
+        effective: _Optional[int] = ...,
+        points: _Optional[int] = ...,
+    ) -> None: ...
 
 class OverallResult(_message.Message):
-    __slots__ = ["semester", "semester_grade_point_average", "cumulative_grade_point_average"]
+    __slots__ = [
+        "semester",
+        "semester_grade_point_average",
+        "cumulative_grade_point_average",
+    ]
     SEMESTER_FIELD_NUMBER: _ClassVar[int]
     SEMESTER_GRADE_POINT_AVERAGE_FIELD_NUMBER: _ClassVar[int]
     CUMULATIVE_GRADE_POINT_AVERAGE_FIELD_NUMBER: _ClassVar[int]
     semester: SemesterRef
     semester_grade_point_average: float
     cumulative_grade_point_average: float
-    def __init__(self, semester: _Optional[_Union[SemesterRef, _Mapping]] = ..., semester_grade_point_average: _Optional[float] = ..., cumulative_grade_point_average: _Optional[float] = ...) -> None: ...
+    def __init__(
+        self,
+        semester: _Optional[_Union[SemesterRef, _Mapping]] = ...,
+        semester_grade_point_average: _Optional[float] = ...,
+        cumulative_grade_point_average: _Optional[float] = ...,
+    ) -> None: ...
 
 class ExamResultRecords(_message.Message):
     __slots__ = ["course_wise", "overall"]
@@ -111,7 +151,11 @@ class ExamResultRecords(_message.Message):
     OVERALL_FIELD_NUMBER: _ClassVar[int]
     course_wise: _containers.RepeatedCompositeFieldContainer[ExamResultRecord]
     overall: _containers.RepeatedCompositeFieldContainer[OverallResult]
-    def __init__(self, course_wise: _Optional[_Iterable[_Union[ExamResultRecord, _Mapping]]] = ..., overall: _Optional[_Iterable[_Union[OverallResult, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self,
+        course_wise: _Optional[_Iterable[_Union[ExamResultRecord, _Mapping]]] = ...,
+        overall: _Optional[_Iterable[_Union[OverallResult, _Mapping]]] = ...,
+    ) -> None: ...
 
 class Course(_message.Message):
     __slots__ = ["ref", "type", "attendance", "internal_marks", "syllabus_doc"]
@@ -125,13 +169,22 @@ class Course(_message.Message):
     attendance: Attendance
     internal_marks: Marks
     syllabus_doc: str
-    def __init__(self, ref: _Optional[_Union[CourseRef, _Mapping]] = ..., type: _Optional[str] = ..., attendance: _Optional[_Union[Attendance, _Mapping]] = ..., internal_marks: _Optional[_Union[Marks, _Mapping]] = ..., syllabus_doc: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        ref: _Optional[_Union[CourseRef, _Mapping]] = ...,
+        type: _Optional[str] = ...,
+        attendance: _Optional[_Union[Attendance, _Mapping]] = ...,
+        internal_marks: _Optional[_Union[Marks, _Mapping]] = ...,
+        syllabus_doc: _Optional[str] = ...,
+    ) -> None: ...
 
 class Courses(_message.Message):
     __slots__ = ["courses"]
     COURSES_FIELD_NUMBER: _ClassVar[int]
     courses: _containers.RepeatedCompositeFieldContainer[Course]
-    def __init__(self, courses: _Optional[_Iterable[_Union[Course, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self, courses: _Optional[_Iterable[_Union[Course, _Mapping]]] = ...
+    ) -> None: ...
 
 class AttendanceRecord(_message.Message):
     __slots__ = ["attendance", "course"]
@@ -139,13 +192,19 @@ class AttendanceRecord(_message.Message):
     COURSE_FIELD_NUMBER: _ClassVar[int]
     attendance: Attendance
     course: CourseRef
-    def __init__(self, attendance: _Optional[_Union[Attendance, _Mapping]] = ..., course: _Optional[_Union[CourseRef, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self,
+        attendance: _Optional[_Union[Attendance, _Mapping]] = ...,
+        course: _Optional[_Union[CourseRef, _Mapping]] = ...,
+    ) -> None: ...
 
 class AttendanceRecords(_message.Message):
     __slots__ = ["records"]
     RECORDS_FIELD_NUMBER: _ClassVar[int]
     records: _containers.RepeatedCompositeFieldContainer[AttendanceRecord]
-    def __init__(self, records: _Optional[_Iterable[_Union[AttendanceRecord, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self, records: _Optional[_Iterable[_Union[AttendanceRecord, _Mapping]]] = ...
+    ) -> None: ...
 
 class ScheduledClass(_message.Message):
     __slots__ = ["course", "start_time", "end_time", "faculty", "room", "attendance"]
@@ -161,16 +220,34 @@ class ScheduledClass(_message.Message):
     faculty: str
     room: str
     attendance: AttendanceState
-    def __init__(self, course: _Optional[_Union[CourseRef, _Mapping]] = ..., start_time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., end_time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., faculty: _Optional[str] = ..., room: _Optional[str] = ..., attendance: _Optional[_Union[AttendanceState, str]] = ...) -> None: ...
+    def __init__(
+        self,
+        course: _Optional[_Union[CourseRef, _Mapping]] = ...,
+        start_time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
+        end_time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
+        faculty: _Optional[str] = ...,
+        room: _Optional[str] = ...,
+        attendance: _Optional[_Union[AttendanceState, str]] = ...,
+    ) -> None: ...
 
 class ScheduledClasses(_message.Message):
     __slots__ = ["classes"]
     CLASSES_FIELD_NUMBER: _ClassVar[int]
     classes: _containers.RepeatedCompositeFieldContainer[ScheduledClass]
-    def __init__(self, classes: _Optional[_Iterable[_Union[ScheduledClass, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self, classes: _Optional[_Iterable[_Union[ScheduledClass, _Mapping]]] = ...
+    ) -> None: ...
 
 class AmizoneDiaryEvent(_message.Message):
-    __slots__ = ["type", "course_code", "course_name", "faculty", "room", "start", "end"]
+    __slots__ = [
+        "type",
+        "course_code",
+        "course_name",
+        "faculty",
+        "room",
+        "start",
+        "end",
+    ]
     TYPE_FIELD_NUMBER: _ClassVar[int]
     COURSE_CODE_FIELD_NUMBER: _ClassVar[int]
     COURSE_NAME_FIELD_NUMBER: _ClassVar[int]
@@ -185,7 +262,16 @@ class AmizoneDiaryEvent(_message.Message):
     room: str
     start: str
     end: str
-    def __init__(self, type: _Optional[str] = ..., course_code: _Optional[str] = ..., course_name: _Optional[str] = ..., faculty: _Optional[str] = ..., room: _Optional[str] = ..., start: _Optional[str] = ..., end: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        type: _Optional[str] = ...,
+        course_code: _Optional[str] = ...,
+        course_name: _Optional[str] = ...,
+        faculty: _Optional[str] = ...,
+        room: _Optional[str] = ...,
+        start: _Optional[str] = ...,
+        end: _Optional[str] = ...,
+    ) -> None: ...
 
 class ScheduledExam(_message.Message):
     __slots__ = ["course", "time", "mode", "location"]
@@ -197,7 +283,13 @@ class ScheduledExam(_message.Message):
     time: _timestamp_pb2.Timestamp
     mode: str
     location: str
-    def __init__(self, course: _Optional[_Union[CourseRef, _Mapping]] = ..., time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., mode: _Optional[str] = ..., location: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        course: _Optional[_Union[CourseRef, _Mapping]] = ...,
+        time: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
+        mode: _Optional[str] = ...,
+        location: _Optional[str] = ...,
+    ) -> None: ...
 
 class ExaminationSchedule(_message.Message):
     __slots__ = ["title", "exams"]
@@ -205,10 +297,24 @@ class ExaminationSchedule(_message.Message):
     EXAMS_FIELD_NUMBER: _ClassVar[int]
     title: str
     exams: _containers.RepeatedCompositeFieldContainer[ScheduledExam]
-    def __init__(self, title: _Optional[str] = ..., exams: _Optional[_Iterable[_Union[ScheduledExam, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self,
+        title: _Optional[str] = ...,
+        exams: _Optional[_Iterable[_Union[ScheduledExam, _Mapping]]] = ...,
+    ) -> None: ...
 
 class Profile(_message.Message):
-    __slots__ = ["name", "enrollment_number", "enrollment_validity", "batch", "program", "date_of_birth", "blood_group", "id_card_number", "uuid"]
+    __slots__ = [
+        "name",
+        "enrollment_number",
+        "enrollment_validity",
+        "batch",
+        "program",
+        "date_of_birth",
+        "blood_group",
+        "id_card_number",
+        "uuid",
+    ]
     NAME_FIELD_NUMBER: _ClassVar[int]
     ENROLLMENT_NUMBER_FIELD_NUMBER: _ClassVar[int]
     ENROLLMENT_VALIDITY_FIELD_NUMBER: _ClassVar[int]
@@ -227,7 +333,20 @@ class Profile(_message.Message):
     blood_group: str
     id_card_number: str
     uuid: str
-    def __init__(self, name: _Optional[str] = ..., enrollment_number: _Optional[str] = ..., enrollment_validity: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., batch: _Optional[str] = ..., program: _Optional[str] = ..., date_of_birth: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., blood_group: _Optional[str] = ..., id_card_number: _Optional[str] = ..., uuid: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        name: _Optional[str] = ...,
+        enrollment_number: _Optional[str] = ...,
+        enrollment_validity: _Optional[
+            _Union[_timestamp_pb2.Timestamp, _Mapping]
+        ] = ...,
+        batch: _Optional[str] = ...,
+        program: _Optional[str] = ...,
+        date_of_birth: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
+        blood_group: _Optional[str] = ...,
+        id_card_number: _Optional[str] = ...,
+        uuid: _Optional[str] = ...,
+    ) -> None: ...
 
 class Semester(_message.Message):
     __slots__ = ["name", "ref"]
@@ -235,13 +354,17 @@ class Semester(_message.Message):
     REF_FIELD_NUMBER: _ClassVar[int]
     name: str
     ref: str
-    def __init__(self, name: _Optional[str] = ..., ref: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, name: _Optional[str] = ..., ref: _Optional[str] = ...
+    ) -> None: ...
 
 class SemesterList(_message.Message):
     __slots__ = ["semesters"]
     SEMESTERS_FIELD_NUMBER: _ClassVar[int]
     semesters: _containers.RepeatedCompositeFieldContainer[Semester]
-    def __init__(self, semesters: _Optional[_Iterable[_Union[Semester, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self, semesters: _Optional[_Iterable[_Union[Semester, _Mapping]]] = ...
+    ) -> None: ...
 
 class WifiMacInfo(_message.Message):
     __slots__ = ["addresses", "slots", "free_slots"]
@@ -251,7 +374,12 @@ class WifiMacInfo(_message.Message):
     addresses: _containers.RepeatedScalarFieldContainer[str]
     slots: int
     free_slots: int
-    def __init__(self, addresses: _Optional[_Iterable[str]] = ..., slots: _Optional[int] = ..., free_slots: _Optional[int] = ...) -> None: ...
+    def __init__(
+        self,
+        addresses: _Optional[_Iterable[str]] = ...,
+        slots: _Optional[int] = ...,
+        free_slots: _Optional[int] = ...,
+    ) -> None: ...
 
 class DeregisterWifiMacRequest(_message.Message):
     __slots__ = ["address"]
@@ -265,7 +393,9 @@ class RegisterWifiMacRequest(_message.Message):
     OVERRIDE_LIMIT_FIELD_NUMBER: _ClassVar[int]
     address: str
     override_limit: bool
-    def __init__(self, address: _Optional[str] = ..., override_limit: bool = ...) -> None: ...
+    def __init__(
+        self, address: _Optional[str] = ..., override_limit: bool = ...
+    ) -> None: ...
 
 class FillFacultyFeedbackRequest(_message.Message):
     __slots__ = ["rating", "query_rating", "comment"]
@@ -275,7 +405,12 @@ class FillFacultyFeedbackRequest(_message.Message):
     rating: int
     query_rating: int
     comment: str
-    def __init__(self, rating: _Optional[int] = ..., query_rating: _Optional[int] = ..., comment: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        rating: _Optional[int] = ...,
+        query_rating: _Optional[int] = ...,
+        comment: _Optional[str] = ...,
+    ) -> None: ...
 
 class FillFacultyFeedbackResponse(_message.Message):
     __slots__ = ["filled_for"]
