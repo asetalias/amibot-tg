@@ -191,7 +191,7 @@ async def get_class_schedule_handler(
             )
             return
         if len(response.classes) == 0:
-            msg = "Enjoy your class-free day! 😄🎉"
+            msg = "No classes today! 🥳🎉"
         else:
             msg = get_class_schedule_formatter(response)
             if len(cal_date) > 1:
@@ -378,7 +378,7 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
             # ! Need better exception handling
             await context.bot.send_message(
                 chat_id=user_id,
-                text="No Exams! Chill......🤓",
+                text="No Exams yet 😮‍💨",
                 reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             )
             return
@@ -453,7 +453,7 @@ async def get_exam_result_handler(update: Update, context: ContextTypes.DEFAULT_
         elif response is None:
             await context.bot.send_message(
                 chat_id=user_id,
-                text="No Results yet",
+                text="No Results yet 😣",
                 reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             )
             return
