@@ -131,7 +131,7 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
     if "calendar" in update.callback_query.data:
         await update.callback_query.message.reply_text(
-            f'Get schedule for the month of *_{datetime.now().strftime("%B")}_*',
+            f'Get schedule for the month of *{datetime.now().strftime("%B")}*',
             parse_mode=ParseMode.MARKDOWN_V2,
             reply_markup=helpers.create_calendar_markup(datetime.now().month),
         )

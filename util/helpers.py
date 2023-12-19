@@ -40,7 +40,14 @@ def create_calendar_markup(new_month):
     old_month = new_month
 
     first_day = datetime.date(year, month, 1)
-    last_day = datetime.date(year, month + 1, 1) - datetime.timedelta(days=1)
+    if month == 12:
+        next_month = 1
+        next_year = year + 1
+    else:
+        next_month = month + 1
+        next_year = year
+
+    last_day = datetime.date(next_year, next_month, 1) - datetime.timedelta(days=1)
 
     for day in range(1, last_day.day + 1):
         date = datetime.date(year, month, day)
