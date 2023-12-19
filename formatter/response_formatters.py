@@ -39,7 +39,7 @@ def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
         try:
             msg += f"{exam.location} \n\n"
         except:
-            msg += "\n"
+            msg += ""
     return msg
 
 
