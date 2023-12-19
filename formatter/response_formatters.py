@@ -2,11 +2,30 @@ import gen.amizone_pb2 as pb
 from datetime import datetime
 import logging
 
-logger = logging.getLogger()
+logger = logging.getLogger("AmiBot")
+
+
+def exam_result_formatter(response: pb.ExamResultRecords, semester) -> str:
+    logger.info("Formatting exam result")
+    message = "Exam Results: \n\n"
+    for sem in response.overall:
+        if sem.semester.semester_ref == semester:
+            message += f"SGPA: {sem.semester_grade_point_average:.2f}\n"
+    message += (
+        f"Current CGPA: {response.overall[-1].cumulative_grade_point_average:.2f}\n\n"
+    )
+    message += "Subject wise: \n"
+    for subject in response.course_wise:
+        message += f"{subject.course.code} \n"
+        message += f"{subject.course.name} \n"
+        message += f"Grade: {subject.score.grade} \n"
+        message += f"Grade Point: {subject.score.grade_point} \n\n"
+
+    return message
 
 
 def get_wifi_info_formatter(response: pb.WifiMacInfo) -> str:
-    logger.info("Formatting WiFi info from grpc")
+    logger.info("Formatting WiFi info")
     message = "WiFi Info: \n\nRegistered adresses:\n"
     for mac_address in response.addresses:
         message += f"→ {mac_address} \n"
@@ -16,7 +35,7 @@ def get_wifi_info_formatter(response: pb.WifiMacInfo) -> str:
 
 
 def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
-    logger.info("Formatting")
+    logger.info("Formatting Attendance records")
     msg = "Attendance Records: \n\n"
     for record in response.records:
         percent = round(record.attendance.attended / record.attendance.held * 100, 2)
@@ -27,7 +46,7 @@ def get_attendance_formatter(response: pb.AttendanceRecords) -> str:
 
 
 def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
-    logger.info("Formatting")
+    logger.info("Formatting exam schedule")
     msg = response.title + "\n\n"
     for exam in response.exams:
         date = datetime.fromtimestamp(exam.time.seconds)
@@ -44,7 +63,7 @@ def get_exam_formatter(response: pb.ExaminationSchedule) -> str:
 
 
 def get_courses_formatter(response: pb.Courses) -> str:
-    logger.info("Formatting")
+    logger.info("Formatting current courses")
     msg = "Current Courses: \n\n"
     for course in response.courses:
         link = f"<a href='{course.syllabus_doc}'>Syllabus</a>"
@@ -56,7 +75,7 @@ def get_courses_formatter(response: pb.Courses) -> str:
 
 
 def get_class_schedule_formatter(response: pb.ScheduledClasses) -> str:
-    logger.info("Formatting")
+    logger.info("Formatting class schedule")
 
     attendance_indicators = ""
 
