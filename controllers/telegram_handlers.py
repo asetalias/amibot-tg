@@ -12,7 +12,7 @@ import logging
 from util.env import TOKEN
 from util import helpers
 
-logger = logging.getLogger()
+logger = logging.getLogger("AmiBot")
 
 BUTTON_MARKUP = [
     [
@@ -28,15 +28,16 @@ BUTTON_MARKUP = [
         InlineKeyboardButton("Tomorrow Schedule", callback_data="tomorrow_schedule"),
     ],
     [
-        InlineKeyboardButton("Get WiFi info", callback_data="get_wifi_info"),
-        InlineKeyboardButton("Register for WiFi", callback_data="register_wifi"),
+        InlineKeyboardButton("Calendar Schedule", callback_data="calendar"),
     ],
     [
         InlineKeyboardButton("Exam Schedule", callback_data="exam"),
-        InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback"),
+        InlineKeyboardButton("Exam Result", callback_data="exam_result"),
     ],
     [
-        InlineKeyboardButton("Calendar Schedule", callback_data="calendar"),
+        InlineKeyboardButton("Get WiFi info", callback_data="get_wifi_info"),
+        InlineKeyboardButton("Register for WiFi", callback_data="register_wifi"),
+        InlineKeyboardButton("Faculty Feedback", callback_data="faculty_feedback"),
     ],
 ]
 
@@ -98,22 +99,28 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             disable_web_page_preview=True,
         )
 
-    if "wearos" in update.callback_query.data:
+    if update.callback_query.data == "wearos":
         await wearos_token_handler(update, context)
 
-    if "attendance" in update.callback_query.data:
+    if update.callback_query.data == "attendance":
         await get_attendance_handler(update, context)
 
-    if "current_course" in update.callback_query.data:
+    if update.callback_query.data == "current_course":
         await get_current_course_handler(update, context)
 
-    if "class_schedule" in update.callback_query.data:
+    if update.callback_query.data == "class_schedule":
         await get_class_schedule_handler(update, context)
 
-    if "tomorrow_schedule" in update.callback_query.data:
+    if update.callback_query.data == "tomorrow_schedule":
         await get_class_schedule_handler(update, context, tomorrow=True, cal_date="")
 
-    if "exam" in update.callback_query.data:
+    if update.callback_query.data == "exam_result":
+        await select_exam_result_semester_handler(update, context)
+
+    if "selected_sem_" in update.callback_query.data:
+        await get_exam_result_handler(update, context)
+
+    if update.callback_query.data == "exam":
         await get_exam_schedule_handler(update, context)
 
     if "faculty_feedback" in update.callback_query.data:
@@ -121,15 +128,15 @@ async def button_query_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             FEEDBACK_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
 
-    if "get_wifi_info" in update.callback_query.data:
+    if update.callback_query.data == "get_wifi_info":
         await get_wifi_info_handler(update, context)
 
-    if "register_wifi" in update.callback_query.data:
+    if update.callback_query.data == "register_wifi":
         await update.callback_query.message.reply_text(
             WIFI_MESSAGE, reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP)
         )
 
-    if "calendar" in update.callback_query.data:
+    if update.callback_query.data == "calendar":
         await update.callback_query.message.reply_text(
             f'Get schedule for the month of *{datetime.now().strftime("%B")}*',
             parse_mode=ParseMode.MARKDOWN_V2,
@@ -184,7 +191,7 @@ async def get_class_schedule_handler(
             )
             return
         if len(response.classes) == 0:
-            msg = "Enjoy your class-free day! 😄🎉"
+            msg = "No classes today! 🥳🎉"
         else:
             msg = get_class_schedule_formatter(response)
             if len(cal_date) > 1:
@@ -371,7 +378,7 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
             # ! Need better exception handling
             await context.bot.send_message(
                 chat_id=user_id,
-                text="No Exams! Chill......🤓",
+                text="No Exams yet 😮‍💨",
                 reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
             )
             return
@@ -389,6 +396,81 @@ async def get_exam_schedule_handler(update: Update, context: ContextTypes.DEFAUL
         await context.bot.send_message(
             chat_id=user_id,
             text="There was an error fetching exam schedule. Please try again later.",
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
+
+
+async def select_exam_result_semester_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+):
+    user_id = update.effective_user.id
+    try:
+        semester_list = await get_semesters(user_id)
+        semester_list = [
+            semester.name for semester in semester_list.semesters[1:]
+        ]  # We only want the semesters before the current one
+
+        if semester_list:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text="Select semester",
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                semester, callback_data=f"selected_sem_{semester}"
+                            )
+                            for semester in semester_list[::-1]  # print sems in asc
+                        ]
+                    ]
+                ),
+            )
+    except Exception as e:
+        print(e)
+
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="There was an error fetching exam result. Please try again later.",
+            reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+        )
+
+
+async def get_exam_result_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    try:
+        semester = update.callback_query.data.split("_")[-1]
+        await context.bot.send_message(chat_id=user_id, text="Fetching exam result...")
+
+        response = await get_exam_result(user_id, semester)
+        logger.debug(response)
+
+        if response == "not_logged_in":
+            await context.bot.send_message(
+                chat_id=user_id,
+                text="You are not logged in. Use /login {amizone_id} {password} to login.",
+            )
+            return
+        elif response is None:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text="No Results yet 😣",
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            )
+            return
+        else:
+            msg = exam_result_formatter(response, semester)
+
+            await context.bot.send_message(
+                chat_id=user_id,
+                text=msg,
+                reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
+            )
+    except Exception as e:
+        print(e)
+
+        await context.bot.send_message(
+            chat_id=user_id,
+            text="There was an error fetching exam result. Please try again later.",
             reply_markup=InlineKeyboardMarkup(BUTTON_MARKUP),
         )
 

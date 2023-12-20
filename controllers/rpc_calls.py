@@ -3,10 +3,11 @@ import gen.amizone_pb2 as pb
 from util.stub import stubber
 from datetime import date, timedelta, datetime
 from google.type import date_pb2 as _date_pb2
-import logging
 from . import db
+import logging
 
-logger = logging.getLogger()
+
+logger = logging.getLogger("AmiBot")
 
 
 async def remove_profile(telegram_id: int):
@@ -39,7 +40,7 @@ async def get_user_profile(telegram_id: int):
         await channel.close()
 
 
-async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
+async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None | str:
     try:
         logger.info("Getting schedule")
 
@@ -63,10 +64,10 @@ async def get_class_schedule_profile(profile: dict) -> pb.ScheduledClass | None:
 
 async def get_class_schedule(
     telegram_id: int, tomorrow=False, cal_date=""
-) -> pb.ScheduledClass | None:
+) -> pb.ScheduledClass | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
 
@@ -95,10 +96,10 @@ async def get_class_schedule(
         await channel.close()
 
 
-async def get_current_course(telegram_id: int) -> pb.Courses | None:
+async def get_current_course(telegram_id: int) -> pb.Courses | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     try:
@@ -111,10 +112,10 @@ async def get_current_course(telegram_id: int) -> pb.Courses | None:
         await channel.close()
 
 
-async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None:
+async def get_attendance(telegram_id: int) -> pb.AttendanceRecords | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     try:
@@ -147,10 +148,10 @@ async def get_exam_schedule(telegram_id) -> pb.ExaminationSchedule | None | str:
 
 async def fill_faculty_feedback(
     telegram_id, rating, query_rating, comment
-) -> pb.FillFacultyFeedbackRequest | None:
+) -> pb.FillFacultyFeedbackRequest | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     try:
@@ -169,10 +170,10 @@ async def fill_faculty_feedback(
         await channel.close()
 
 
-async def get_wifi_info(telegram_id) -> pb.WifiMacInfo | None:
+async def get_wifi_info(telegram_id) -> pb.WifiMacInfo | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
 
@@ -191,10 +192,10 @@ async def get_wifi_info(telegram_id) -> pb.WifiMacInfo | None:
 
 async def register_wifi(
     telegram_id, mac_address, override_limit
-) -> pb.RegisterWifiMacRequest | None:
+) -> pb.RegisterWifiMacRequest | None | str:
     profile = await get_profile(telegram_id)
     if profile is None:
-        return None
+        return "not_logged_in"
 
     stub, metadata, channel = stubber(profile["username"], profile["password"])
     try:
@@ -207,6 +208,47 @@ async def register_wifi(
         return response
     except Exception as e:
         logger.warning(f"From register_wifi: {e}")
+        return None
+    finally:
+        await channel.close()
+
+
+async def get_semesters(telegram_id) -> pb.SemesterList | None | str:
+    profile = await get_profile(telegram_id)
+    if profile is None:
+        return "not_logged_in"
+
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
+
+    try:
+        response = await stub.GetSemesters(
+            pb.EmptyMessage(),
+            metadata=metadata,
+        )
+        return response
+    except Exception as e:
+        logger.warning(f"From get_semesters: {e}")
+        return None
+    finally:
+        await channel.close()
+
+
+async def get_exam_result(telegram_id, semester) -> pb.ExamResultRecords | None | str:
+    profile = await get_profile(telegram_id)
+
+    if profile is None:
+        return "not_logged_in"
+
+    stub, metadata, channel = stubber(profile["username"], profile["password"])
+
+    try:
+        response = await stub.GetExamResult(
+            pb.SemesterRef(semester_ref=semester),
+            metadata=metadata,
+        )
+        return response
+    except Exception as e:
+        logger.warning(f"From get_exam_result: {e}")
         return None
     finally:
         await channel.close()
