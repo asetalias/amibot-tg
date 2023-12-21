@@ -1,4 +1,4 @@
-# Contributing to go-amizone
+# Contributing to Amibot-tg
 
 > Note: The `dev` branch is the most up-to date version of this repository and where major features are currently being worked on
 
@@ -112,3 +112,19 @@ Once the bot is up and running, you can use the following commands to interact w
 - `/attendance`: Get your attendance information.
 - `/schedule`: Get your class schedule.
 - `/about`: Get details about our project.
+
+## Testing CI/CD
+
+For testing CI/CD, we use [act](https://github.com/nektos/act). Act is a tool that allows you to run GitHub Actions locally. It spins up a Docker container that emulates the GitHub Actions environment, allowing you to test your workflows locally. To install act, run the following command:
+
+```shell
+brew install act
+```
+Further, you can run the following command to test the CI/CD pipeline:
+
+```shell
+act -W .github/workflows/workflow-file-name.yml
+```
+
+
+
