@@ -1,35 +1,40 @@
 package utils
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/fernet/fernet-go"
-	"github.com/spf13/viper"
 )
 
 type Config struct {
-	MongoUri      string `mapstructure:"MONGO_URI"`
-	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
-	GrpcAddress   string `mapstructure:"GRPC_ADDRESS"`
-	Key           string `mapstructure:"KEY"`
-	FernetKey     []*fernet.Key `mapstructure:"FERNET_KEY"`
+	MongoUri  string        `mapstructure:"MONGO_URI"`
+	Key       string        `mapstructure:"KEY"`
+	FernetKey []*fernet.Key `mapstructure:"FERNET_KEY"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
-	viper.SetConfigName("app")
-	viper.AutomaticEnv()
+	config.MongoUri, err = getEnvVar("MONGO_URI")
+	if err != nil {
+		return 
+	}
 
-	err = viper.ReadInConfig()
+	config.Key, err = getEnvVar("KEY")
 	if err != nil {
 		return
 	}
 
-	err = viper.Unmarshal(&config)
-	if err != nil {
-		return
-	}
-
-	config.GrpcAddress = "amizone.fly.dev:443"
 	config.FernetKey = fernet.MustDecodeKeys(config.Key)
 
 	return
+}
+
+func getEnvVar(key string) (string, error) {
+	value := os.Getenv(key)
+	if value == "" {
+		return "", fmt.Errorf("%s environment variable not set", key)
+	}
+	log.Println("getEnvVar:", key, value)
+	return value, nil
 }

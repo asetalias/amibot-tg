@@ -18,15 +18,6 @@ def main():
  
     logger = AmibotLogger("AmiBot")
 
-
-    # Sentry, skip for dev mode
-    if not DEV_MODE and not SENTRY_DSN == "":
-        logger.info("Starting sentry...")
-        sentry_sdk.init(
-            dsn=SENTRY_DSN,
-            traces_sample_rate=1.0,
-        )
-
     # Set token according to dev mode
     if DEV_MODE == "True":
         logger.debug("Running in dev mode...")
