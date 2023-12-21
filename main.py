@@ -6,7 +6,7 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
-from util.env import TOKEN, SENTRY_DSN, DEV_MODE, TEST_TOKEN
+from util.env import TOKEN, DEV_MODE, TEST_TOKEN
 from util.logger import AmibotLogger
 from controllers.telegram_handlers import *
 from controllers.db import get_profile_via_token
