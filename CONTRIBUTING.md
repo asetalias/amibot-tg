@@ -42,10 +42,10 @@ cd Amibot-tg
 
 ### Installing dependencies
 
-1. Install Python dependencies:
+1. Install Python dependencies, pre-commit hooks and setup the virtual environment:
 
     ```shell
-    poetry install
+    make install
     ```
 
 2. Install Nodemon
@@ -99,6 +99,16 @@ If you want to automatically restart the bot whenever you make changes to the co
 make dev
 ```
 
+## Linting/Formatting
+
+Always make sure to check the quality of code before committing/pushing i.e making sure that the codebase is properly formatted and linted.
+
+Use the following command to Lint and format.
+
+```shell
+make check
+```
+
 ## Go Amizone
 
 This project uses [go-amizone](https://github.com/ditsuke/go-amizone) via gRPC to get its data. While knowledge of gRPC isn't a requirement, you can test how we get data through this [Postman collection](postman.com/ditsuke/workspace/ditsuke/)
@@ -120,11 +130,9 @@ For testing CI/CD, we use [act](https://github.com/nektos/act). Act is a tool th
 ```shell
 brew install act
 ```
+
 Further, you can run the following command to test the CI/CD pipeline:
 
 ```shell
 act -W .github/workflows/workflow-file-name.yml
 ```
-
-
-
